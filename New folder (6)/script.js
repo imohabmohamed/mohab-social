@@ -435,7 +435,7 @@ function setupReducedMotion() {
 /* 15. VISIBILITY OPTIMIZATION */
 function setupVisibilityOptimization() {}
 
-/* 16. KICK LIVE CHECKER & STANDALONE 3D HOLOGRAPHIC WIDGET */
+/* 16. KICK LIVE CHECKER & PERMANENT HOLOGRAPHIC WIDGET */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
@@ -444,43 +444,68 @@ async function checkKickStatus() {
     const kickNode = document.querySelector('.nav-node[data-brand="kick"]');
     const holoWidget = document.getElementById('hologram-live-widget');
     const holoTitle = document.getElementById('holo-stream-title');
+    const holoDot = document.getElementById('holo-dot');
+    const holoStatusTag = document.getElementById('holo-status-tag');
+    const holoScreenFrame = document.getElementById('holo-screen-frame');
+    const holoFooterText = document.getElementById('holo-footer-text');
+    
     if (!kickNode) return;
 
     const subtitleEl = kickNode.querySelector('.node-subtitle');
     
+    // ربط الضغط على الهولوجرام لفتح القناة في كل الأوقات
+    if (holoWidget) {
+        holoWidget.onclick = () => {
+            window.open('https://kick.com/imohab', '_blank');
+        };
+    }
+
     try {
         const response = await fetch('/api/check-live');
         if (response.ok) {
             const data = await response.json();
             
             if (data.isLive === true) {
-                if (subtitleEl) {
-                    subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold;">● LIVE NOW</span>';
-                }
+                // وضع اللايف
+                if (subtitleEl) subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold;">● LIVE NOW</span>';
                 kickNode.style.borderLeft = '2px solid #53FC18';
                 kickNode.style.paddingLeft = '10px';
-                
-                // إظهار شاشة الهولوجرام المائلة 3D في الفضاء
-                if (holoWidget) {
-                    holoWidget.style.display = 'block';
-                    if (holoTitle) {
-                        holoTitle.innerText = data.title ? data.title.toUpperCase() : 'KICK LIVE STREAM';
-                    }
-                    
-                    // توجيه الزائر لقناتك عند النقر على الهولوجرام
-                    holoWidget.onclick = () => {
-                        window.open('https://kick.com/imohab', '_blank');
-                    };
+
+                if (holoDot) holoDot.classList.add('is-live');
+                if (holoTitle) {
+                    holoTitle.classList.add('is-live');
+                    holoTitle.innerText = data.title ? data.title.toUpperCase() : 'KICK LIVE STREAM';
+                }
+                if (holoStatusTag) holoStatusTag.innerText = 'LIVE // 1080P';
+                if (holoFooterText) holoFooterText.innerText = 'CLICK TO JOIN STREAM';
+
+                // عرض إمبد البث الحي لو مش متواجد حالياً
+                if (holoScreenFrame && !holoScreenFrame.querySelector('iframe')) {
+                    holoScreenFrame.innerHTML = '<iframe src="https://player.kick.com/imohab?muted=true" frameborder="0" scrolling="no" allowfullscreen></iframe>';
                 }
             } else {
-                if (subtitleEl) {
-                    subtitleEl.innerText = 'LIVE STREAMING';
-                }
+                // وضع الأوفلاين (الشاشة موجودة لكن تعرض وضع الاستعداد)
+                if (subtitleEl) subtitleEl.innerText = 'LIVE STREAMING';
                 kickNode.style.borderLeft = 'none';
                 kickNode.style.paddingLeft = '0px';
-                
-                if (holoWidget) {
-                    holoWidget.style.display = 'none';
+
+                if (holoDot) holoDot.classList.remove('is-live');
+                if (holoTitle) {
+                    holoTitle.classList.remove('is-live');
+                    holoTitle.innerText = 'OFFLINE / STANDBY';
+                }
+                if (holoStatusTag) holoStatusTag.innerText = 'KICK // OFF';
+                if (holoFooterText) holoFooterText.innerText = 'STANDBY MODE';
+
+                // إرجاع واجهة الأوفلاين لو الـ iframe موجود
+                const iframe = holoScreenFrame?.querySelector('iframe');
+                if (iframe) {
+                    holoScreenFrame.innerHTML = `
+                        <div class="offline-placeholder" id="offline-placeholder">
+                            <span>STREAM OFFLINE</span>
+                            <p>CLICK TO VISIT CHANNEL</p>
+                        </div>
+                    `;
                 }
             }
         }

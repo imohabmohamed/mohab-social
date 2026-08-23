@@ -43,7 +43,7 @@
     <!-- Main Spatial App Environment -->
     <main class="nexus-app" id="nexus-app">
         
-        <!-- Left Side: Identity Object -->
+        <!-- Left Side: Identity Object & Permanent Hologram Screen -->
         <section class="identity-section" aria-label="Player Identity">
             <div class="identity-object" id="identity-object">
                 <!-- Avatar System -->
@@ -71,23 +71,27 @@
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Standalone 3D Holographic Stream Widget (Appears when live) -->
-        <div class="hologram-live-widget" id="hologram-live-widget" style="display: none;">
-            <div class="holo-header">
-                <span class="holo-live-dot"></span>
-                <span class="holo-title-text" id="holo-stream-title">KICK LIVE STREAM</span>
-                <span class="holo-tag">LIVE // 1080P60</span>
+            <!-- Permanent Hologram Stream Deck (Always Visible) -->
+            <div class="hologram-live-widget" id="hologram-live-widget">
+                <div class="holo-header">
+                    <span class="holo-live-dot" id="holo-dot"></span>
+                    <span class="holo-title-text" id="holo-stream-title">OFFLINE / STANDBY</span>
+                    <span class="holo-tag" id="holo-status-tag">KICK // OFF</span>
+                </div>
+                <div class="holo-screen-frame" id="holo-screen-frame">
+                    <!-- تتغير بناءً على حالة اللايف -->
+                    <div class="offline-placeholder" id="offline-placeholder">
+                        <span>STREAM OFFLINE</span>
+                        <p>CLICK TO VISIT CHANNEL</p>
+                    </div>
+                </div>
+                <div class="holo-footer">
+                    <span id="holo-footer-text">STANDBY MODE</span>
+                    <span class="holo-bracket">]</span>
+                </div>
             </div>
-            <div class="holo-screen-frame">
-                <iframe src="https://player.kick.com/imohab?muted=true" frameborder="0" scrolling="no" allowfullscreen></iframe>
-            </div>
-            <div class="holo-footer">
-                <span>CLICK TO JUMP TO CHAT</span>
-                <span class="holo-bracket">]</span>
-            </div>
-        </div>
+        </section>
 
         <!-- Right Side: Spatial Social Navigation -->
         <nav class="navigation-section" aria-label="Social Navigation">
@@ -178,7 +182,7 @@
         <div class="command-palette-container" role="dialog" aria-modal="true" aria-label="Command System">
             <div class="command-palette-header">
                 <span class="cmd-prompt-symbol">></span>
-                <input type="text" id="command-input" placeholder="Type a command or search node (e.g. discord, kick, focus)..." autocomplete="off" spellcheck="false">
+                <input type="text" id="command-input" placeholder="Type a command or search node..." autocomplete="off" spellcheck="false">
                 <span class="cmd-shortcut-hint">ESC to close</span>
             </div>
             <div class="command-list" id="command-list">
