@@ -44,7 +44,6 @@ function init() {
     setupFocusMode();
     setupEasterEggs();
     setupVisibilityOptimization();
-    setupKickLiveChecker();
 }
 
 /* 1. OPENING SEQUENCE */
@@ -436,37 +435,39 @@ function setupReducedMotion() {
 /* 15. VISIBILITY OPTIMIZATION */
 function setupVisibilityOptimization() {}
 
-/* 16. KICK LIVE CHECKER (FIXED UI BINDING) */
-function setupKickLiveChecker() {
+/* 16. KICK LIVE CHECKER (WINDOW LOAD BOUND) */
+window.addEventListener('load', () => {
+    setTimeout(checkKickStatus, 300);
+});
+
+async function checkKickStatus() {
     const kickNode = document.querySelector('.nav-node[data-brand="kick"]');
     if (!kickNode) return;
 
     const subtitleEl = kickNode.querySelector('.node-subtitle');
     
-    async function checkKickStatus() {
-        try {
-            const response = await fetch('/api/check-live');
-            if (response.ok) {
-                const data = await response.json();
-                
-                if (data.isLive === true) {
-                    if (subtitleEl) {
-                        subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold; text-shadow: 0 0 10px rgba(83,252,24,0.5);">● LIVE NOW — WATCH STREAM</span>';
-                    }
-                    kickNode.style.borderLeft = '2px solid #53FC18';
-                    kickNode.style.paddingLeft = '10px';
-                } else {
-                    if (subtitleEl) {
-                        subtitleEl.innerText = 'LIVE STREAMING';
-                    }
-                    kickNode.style.borderLeft = 'none';
+    try {
+        const response = await fetch('/api/check-live');
+        if (response.ok) {
+            const data = await response.json();
+            
+            if (data.isLive === true) {
+                if (subtitleEl) {
+                    subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold; text-shadow: 0 0 10px rgba(83,252,24,0.5);">● LIVE NOW — WATCH STREAM</span>';
                 }
+                kickNode.style.borderLeft = '2px solid #53FC18';
+                kickNode.style.paddingLeft = '10px';
+            } else {
+                if (subtitleEl) {
+                    subtitleEl.innerText = 'LIVE STREAMING';
+                }
+                kickNode.style.borderLeft = 'none';
+                kickNode.style.paddingLeft = '0px';
             }
-        } catch (error) {
-            console.log("Live check error:", error);
         }
+    } catch (error) {
+        console.log("Live check error:", error);
     }
-
-    checkKickStatus();
-    setInterval(checkKickStatus, 30000);
 }
+
+setInterval(checkKickStatus, 30000);
