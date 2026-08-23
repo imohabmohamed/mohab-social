@@ -73,6 +73,22 @@
             </div>
         </section>
 
+        <!-- Standalone 3D Holographic Stream Widget (Appears when live) -->
+        <div class="hologram-live-widget" id="hologram-live-widget" style="display: none;">
+            <div class="holo-header">
+                <span class="holo-live-dot"></span>
+                <span class="holo-title-text" id="holo-stream-title">KICK LIVE STREAM</span>
+                <span class="holo-tag">LIVE // 1080P60</span>
+            </div>
+            <div class="holo-screen-frame">
+                <iframe src="https://player.kick.com/imohab?muted=true" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+            <div class="holo-footer">
+                <span>CLICK TO JUMP TO CHAT</span>
+                <span class="holo-bracket">]</span>
+            </div>
+        </div>
+
         <!-- Right Side: Spatial Social Navigation -->
         <nav class="navigation-section" aria-label="Social Navigation">
             <div class="nav-nodes-container" id="nav-nodes-container">
@@ -128,7 +144,6 @@
                     <div class="node-line-bottom"></div>
                 </a>
 
-                <!-- Kick Node with Live Mini Embed Player -->
                 <a href="#" class="nav-node" data-id="05" data-name="Kick" data-subtitle="Live Streaming" data-brand="kick">
                     <div class="node-line-top"></div>
                     <div class="node-content">
@@ -138,10 +153,6 @@
                             <span class="node-subtitle">LIVE STREAMING</span>
                         </div>
                         <span class="node-arrow">↗</span>
-                    </div>
-                    <!-- مشغل البث المصغر المخفي افتراضياً ويظهر عند البث -->
-                    <div class="live-embed-container" id="live-embed-container" style="display: none;">
-                        <iframe src="https://player.kick.com/imohab?muted=true" height="140" width="100%" frameborder="0" scrolling="no" allowfullscreen></iframe>
                     </div>
                     <div class="node-line-bottom"></div>
                 </a>
