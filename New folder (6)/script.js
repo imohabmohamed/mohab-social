@@ -436,7 +436,7 @@ function setupReducedMotion() {
 /* 15. VISIBILITY OPTIMIZATION */
 function setupVisibilityOptimization() {}
 
-/* 16. KICK LIVE CHECKER (VIA VERCEL SERVERLESS API) */
+/* 16. KICK LIVE CHECKER (FIXED UI BINDING) */
 function setupKickLiveChecker() {
     const kickNode = document.querySelector('.nav-node[data-brand="kick"]');
     if (!kickNode) return;
@@ -448,23 +448,25 @@ function setupKickLiveChecker() {
             const response = await fetch('/api/check-live');
             if (response.ok) {
                 const data = await response.json();
-                if (data.isLive) {
+                
+                if (data.isLive === true) {
                     if (subtitleEl) {
-                        subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold;">● LIVE NOW — WATCH STREAM</span>';
+                        subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold; text-shadow: 0 0 10px rgba(83,252,24,0.5);">● LIVE NOW — WATCH STREAM</span>';
                     }
-                    kickNode.style.boxShadow = 'inset 0 0 15px rgba(83, 252, 24, 0.15)';
+                    kickNode.style.borderLeft = '2px solid #53FC18';
+                    kickNode.style.paddingLeft = '10px';
                 } else {
                     if (subtitleEl) {
                         subtitleEl.innerText = 'LIVE STREAMING';
                     }
-                    kickNode.style.boxShadow = 'none';
+                    kickNode.style.borderLeft = 'none';
                 }
             }
         } catch (error) {
-            console.log("Live check running in local/static mode.");
+            console.log("Live check error:", error);
         }
     }
 
     checkKickStatus();
-    setInterval(checkKickStatus, 60000); // كل دقيقة يفحص السيرفر
+    setInterval(checkKickStatus, 30000);
 }
