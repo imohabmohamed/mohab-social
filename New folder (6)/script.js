@@ -435,7 +435,7 @@ function setupReducedMotion() {
 /* 15. VISIBILITY OPTIMIZATION */
 function setupVisibilityOptimization() {}
 
-/* 16. KICK LIVE CHECKER (WINDOW LOAD BOUND) */
+/* 16. KICK LIVE CHECKER & MINI EMBED PLAYER */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
@@ -445,6 +445,7 @@ async function checkKickStatus() {
     if (!kickNode) return;
 
     const subtitleEl = kickNode.querySelector('.node-subtitle');
+    const embedContainer = document.getElementById('live-embed-container');
     
     try {
         const response = await fetch('/api/check-live');
@@ -453,16 +454,26 @@ async function checkKickStatus() {
             
             if (data.isLive === true) {
                 if (subtitleEl) {
-                    subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold; text-shadow: 0 0 10px rgba(83,252,24,0.5);">● LIVE NOW — WATCH STREAM</span>';
+                    subtitleEl.innerHTML = `<span style="color: #53FC18; font-weight: bold; text-shadow: 0 0 10px rgba(83,252,24,0.5);">● LIVE: ${data.title || 'WATCH STREAM'}</span>`;
                 }
                 kickNode.style.borderLeft = '2px solid #53FC18';
                 kickNode.style.paddingLeft = '10px';
+                
+                // إظهار مشغل البث المصغر الصامت داخل الموقع فوراً
+                if (embedContainer) {
+                    embedContainer.style.display = 'block';
+                }
             } else {
                 if (subtitleEl) {
                     subtitleEl.innerText = 'LIVE STREAMING';
                 }
                 kickNode.style.borderLeft = 'none';
                 kickNode.style.paddingLeft = '0px';
+                
+                // إخفاء المشغل إذا لم يكن هناك بث
+                if (embedContainer) {
+                    embedContainer.style.display = 'none';
+                }
             }
         }
     } catch (error) {
