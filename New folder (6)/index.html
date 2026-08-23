@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOHAB — Digital Player</title>
+    <meta name="description" content="MOHAB — Gamer, creator and digital player.">
+    <meta name="theme-color" content="#030303">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="MOHAB — Digital Player">
+    <meta property="og:description" content="Gamer, creator and digital player identity matrix.">
+    <meta property="og:type" content="website">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Atmospheric Noise & Scanlines overlay -->
+    <div class="noise-overlay"></div>
+    <div class="scanline-overlay"></div>
+
+    <!-- Generative Canvas Background -->
+    <canvas id="nexus-canvas"></canvas>
+
+    <!-- Edge HUD -->
+    <header class="hud hud-top-left" aria-hidden="true">
+        <span class="hud-glitch">MOHAB // NEXUS</span>
+    </header>
+    <div class="hud hud-top-right" aria-hidden="true">
+        <span class="status-dot"></span> ONLINE
+    </div>
+    <div class="hud hud-bottom-left" aria-hidden="true">
+        SESSION // ACTIVE <span id="live-clock">00:00:00</span>
+    </div>
+    <div class="hud hud-bottom-right" aria-hidden="true">
+        2026 // v4.1.0
+    </div>
+
+    <!-- Main Spatial App Environment -->
+    <main class="nexus-app" id="nexus-app">
+        
+        <!-- Left Side: Identity Object -->
+        <section class="identity-section" aria-label="Player Identity">
+            <div class="identity-object" id="identity-object">
+                <!-- Avatar System -->
+                <div class="avatar-container" id="avatar-container" role="button" aria-label="Player Avatar (Interactive Easter Egg)">
+                    <div class="avatar-shadow"></div>
+                    <div class="avatar-ambient-glow"></div>
+                    <div class="avatar-outer-ring"></div>
+                    <div class="avatar-light-sweep"></div>
+                    <div class="avatar-inner-ring"></div>
+                    <div class="avatar-image-wrap">
+                        <img src="assets/avatar.jpg" alt="MOHAB" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23B6FF00\' stroke-width=\'1\'><circle cx=\'12\' cy=\'8\' r=\'4\'/><path d=\'M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2\'/></svg>'">
+                    </div>
+                    <div class="avatar-reflection"></div>
+                </div>
+
+                <!-- Typographic Logo & Details -->
+                <div class="identity-typography">
+                    <h1 class="logo-text" id="logo-text">MOHAB</h1>
+                    <div class="identity-metadata">
+                        <div class="role-primary">DIGITAL PLAYER</div>
+                        <div class="role-secondary">GAMER / CREATOR / PC ENTHUSIAST</div>
+                        <div class="identity-status-badge">
+                            <span class="breathing-dot"></span> ONLINE &nbsp;//&nbsp; IDENTITY // VERIFIED
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Side: Spatial Social Navigation -->
+        <nav class="navigation-section" aria-label="Social Navigation">
+            <div class="nav-nodes-container" id="nav-nodes-container">
+                <a href="#" class="nav-node" data-id="01" data-name="Discord" data-subtitle="Community" data-brand="discord">
+                    <div class="node-line-top"></div>
+                    <div class="node-content">
+                        <span class="node-id">01</span>
+                        <div class="node-text-block">
+                            <span class="node-title">DISCORD</span>
+                            <span class="node-subtitle">COMMUNITY</span>
+                        </div>
+                        <span class="node-arrow">↗</span>
+                    </div>
+                    <div class="node-line-bottom"></div>
+                </a>
+                
+                <a href="#" class="nav-node" data-id="02" data-name="YouTube" data-subtitle="Gaming Content" data-brand="youtube">
+                    <div class="node-line-top"></div>
+                    <div class="node-content">
+                        <span class="node-id">02</span>
+                        <div class="node-text-block">
+                            <span class="node-title">YOUTUBE</span>
+                            <span class="node-subtitle">GAMING CONTENT</span>
+                        </div>
+                        <span class="node-arrow">↗</span>
+                    </div>
+                    <div class="node-line-bottom"></div>
+                </a>
+
+                <a href="#" class="nav-node" data-id="03" data-name="TikTok" data-subtitle="Short Form" data-brand="tiktok">
+                    <div class="node-line-top"></div>
+                    <div class="node-content">
+                        <span class="node-id">03</span>
+                        <div class="node-text-block">
+                            <span class="node-title">TIKTOK</span>
+                            <span class="node-subtitle">SHORT FORM</span>
+                        </div>
+                        <span class="node-arrow">↗</span>
+                    </div>
+                    <div class="node-line-bottom"></div>
+                </a>
+
+                <a href="#" class="nav-node" data-id="04" data-name="Instagram" data-subtitle="Social" data-brand="instagram">
+                    <div class="node-line-top"></div>
+                    <div class="node-content">
+                        <span class="node-id">04</span>
+                        <div class="node-text-block">
+                            <span class="node-title">INSTAGRAM</span>
+                            <span class="node-subtitle">SOCIAL</span>
+                        </div>
+                        <span class="node-arrow">↗</span>
+                    </div>
+                    <div class="node-line-bottom"></div>
+                </a>
+
+                <a href="#" class="nav-node" data-id="05" data-name="Kick" data-subtitle="Live Streaming" data-brand="kick">
+                    <div class="node-line-top"></div>
+                    <div class="node-content">
+                        <span class="node-id">05</span>
+                        <div class="node-text-block">
+                            <span class="node-title">KICK</span>
+                            <span class="node-subtitle">LIVE STREAMING</span>
+                        </div>
+                        <span class="node-arrow">↗</span>
+                    </div>
+                    <div class="node-line-bottom"></div>
+                </a>
+            </div>
+        </nav>
+
+    </main>
+
+    <!-- Interactive Cursor System (Desktop) -->
+    <div class="cursor-core" id="cursor-core"></div>
+    <div class="cursor-halo" id="cursor-halo"></div>
+    <div class="cursor-interaction-ring" id="cursor-interaction-ring"></div>
+
+    <!-- Link Preview Float (Desktop) -->
+    <div class="link-preview-box" id="link-preview-box" aria-hidden="true">
+        <span class="preview-action">OPEN</span>
+        <span class="preview-target" id="preview-target-name">DISCORD</span>
+        <span class="preview-arrow">↗</span>
+    </div>
+
+    <!-- Command Palette Overlay -->
+    <div class="command-palette-backdrop" id="command-palette-backdrop" aria-hidden="true">
+        <div class="command-palette-container" role="dialog" aria-modal="true" aria-label="Command System">
+            <div class="command-palette-header">
+                <span class="cmd-prompt-symbol">></span>
+                <input type="text" id="command-input" placeholder="Type a command or search node (e.g. discord, kick, focus)..." autocomplete="off" spellcheck="false">
+                <span class="cmd-shortcut-hint">ESC to close</span>
+            </div>
+            <div class="command-list" id="command-list">
+                <div class="command-item active" data-action="discord">
+                    <span class="cmd-key">01</span>
+                    <span class="cmd-label">OPEN DISCORD</span>
+                    <span class="cmd-desc">Community Network</span>
+                </div>
+                <div class="command-item" data-action="youtube">
+                    <span class="cmd-key">02</span>
+                    <span class="cmd-label">OPEN YOUTUBE</span>
+                    <span class="cmd-desc">Gaming Content Vault</span>
+                </div>
+                <div class="command-item" data-action="tiktok">
+                    <span class="cmd-key">03</span>
+                    <span class="cmd-label">OPEN TIKTOK</span>
+                    <span class="cmd-desc">Short Form Streams</span>
+                </div>
+                <div class="command-item" data-action="instagram">
+                    <span class="cmd-key">04</span>
+                    <span class="cmd-label">OPEN INSTAGRAM</span>
+                    <span class="cmd-desc">Visual Feed</span>
+                </div>
+                <div class="command-item" data-action="kick">
+                    <span class="cmd-key">05</span>
+                    <span class="cmd-label">OPEN KICK</span>
+                    <span class="cmd-desc">Live Streaming</span>
+                </div>
+                <div class="command-item" data-action="focus">
+                    <span class="cmd-key">F</span>
+                    <span class="cmd-label">TOGGLE FOCUS MODE</span>
+                    <span class="cmd-desc">Deep immersion state</span>
+                </div>
+                <div class="command-item" data-action="reduce-fx">
+                    <span class="cmd-key">R</span>
+                    <span class="cmd-label">REDUCE EFFECTS</span>
+                    <span class="cmd-desc">Streamline performance</span>
+                </div>
+            </div>
+            <div class="command-palette-footer">
+                <span>NEXUS OS // COMMAND K &nbsp;|&nbsp; USE ARROWS OR TYPE TO FILTER</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opening Intro Sequence Layer -->
+    <div class="intro-curtain" id="intro-curtain">
+        <div class="intro-point" id="intro-point"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
