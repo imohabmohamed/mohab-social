@@ -12,11 +12,11 @@ const state = {
     cursor: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     halo: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     links: [
-        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", avatar: "assets/avatar.jpg" },
-        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", avatar: "assets/avatar.jpg" },
-        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", avatar: "assets/avatar.jpg" },
-        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", avatar: "assets/avatar.jpg" },
-        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", avatar: "assets/avatar.jpg" }
+        { id: "01", name: "Discord", subtitle: "COMMUNITY", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", avatar: "assets/avatar.jpg" },
+        { id: "02", name: "YouTube", subtitle: "GAMING CONTENT", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", avatar: "assets/avatar.jpg" },
+        { id: "03", name: "TikTok", subtitle: "SHORT FORM", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", avatar: "assets/avatar.jpg" },
+        { id: "04", name: "Instagram", subtitle: "SOCIAL", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", avatar: "assets/avatar.jpg" },
+        { id: "05", name: "Kick", subtitle: "LIVE STREAMING", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", avatar: "assets/avatar.jpg" }
     ]
 };
 
@@ -191,8 +191,8 @@ function setupLighting() {
 
     window.addEventListener('touchmove', (e) => {
         if (e.touches.length > 0) {
-            state.mouse.tx = e.touches[0].clientX;
-            state.mouse.ty = e.touches[0].clientY;
+            state.mouse.tx = e.touches.clientX;
+            state.mouse.ty = e.touches.clientY;
             state.mouse.active = true;
         }
     }, { passive: true });
@@ -263,10 +263,9 @@ function setupPlatformCardPreview() {
             if (linkData && card) {
                 sysIdEl.innerText = `SYS // ${linkData.id}`;
                 nameEl.innerText = linkData.name.toUpperCase();
-                handleEl.innerText = linkData.subtitle; // عرض الوصف التفصيلي جوه الكارت
+                handleEl.innerText = linkData.subtitle;
                 avatarEl.src = linkData.avatar;
 
-                // تعيين لون الكارت ليطابق لون المنصة
                 card.setAttribute('data-active-brand', linkData.brand);
 
                 const rect = node.getBoundingClientRect();
@@ -286,13 +285,12 @@ function setupPlatformCardPreview() {
     });
 }
 
-/* KICK LIVE CHECKER */
+/* KICK LIVE CHECKER & CARD LIVE STATUS UPDATE */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
 
 async function checkKickStatus() {
-    const kickNode = document.querySelector('.nav-node[data-brand="kick"]');
     const holoWidget = document.getElementById('hologram-live-widget');
     const holoTitle = document.getElementById('holo-stream-title');
     const holoDot = document.getElementById('holo-dot');
@@ -318,6 +316,9 @@ async function checkKickStatus() {
             const data = await response.json();
             
             if (data.isLive === true) {
+                // تحديث نص الكارت الخاص بكيك ليظهر بوضوح أن اللايف شغال
+                state.links[4].subtitle = "● LIVE NOW - JOIN STREAM";
+
                 if (holoDot) holoDot.classList.add('is-live');
                 if (holoTitle) {
                     holoTitle.classList.add('is-live');
@@ -343,6 +344,8 @@ async function checkKickStatus() {
                     holoScreenFrame.innerHTML = '<iframe src="https://player.kick.com/imohab?muted=true" frameborder="0" scrolling="no" allowfullscreen></iframe>';
                 }
             } else {
+                state.links[4].subtitle = "LIVE STREAMING";
+
                 if (holoDot) holoDot.classList.remove('is-live');
                 if (holoTitle) {
                     holoTitle.classList.remove('is-live');

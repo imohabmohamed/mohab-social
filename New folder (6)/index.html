@@ -7,37 +7,23 @@
     <meta name="description" content="MOHAB — Gamer, creator and digital player.">
     <meta name="theme-color" content="#030303">
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="MOHAB — Digital Player">
-    <meta property="og:description" content="Gamer, creator and digital player identity matrix.">
-    <meta property="og:type" content="website">
-    
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Atmospheric Noise & Scanlines overlay -->
     <div class="noise-overlay"></div>
     <div class="scanline-overlay"></div>
-
-    <!-- Generative Canvas Background -->
     <canvas id="nexus-canvas"></canvas>
 
-    <!-- Edge HUD (Online Status Top Right) -->
     <div class="hud hud-top-right" aria-hidden="true" id="top-status-hud">
         <span class="status-dot" id="top-status-dot"></span> <span id="top-status-text">OFFLINE</span>
     </div>
 
-    <!-- Main Spatial App Environment -->
     <main class="nexus-app" id="nexus-app">
         
-        <!-- Left Side: Identity Object -->
         <section class="identity-section" aria-label="Player Identity">
             <div class="identity-object" id="identity-object">
-                <!-- Avatar System -->
                 <div class="avatar-container" id="avatar-container" role="button" aria-label="Player Avatar">
                     <div class="avatar-shadow"></div>
                     <div class="avatar-ambient-glow"></div>
@@ -50,7 +36,6 @@
                     <div class="avatar-reflection"></div>
                 </div>
 
-                <!-- Typographic Logo & Details -->
                 <div class="identity-typography">
                     <h1 class="logo-text" id="logo-text">MOHAB</h1>
                     <div class="identity-metadata">
@@ -60,7 +45,6 @@
                 </div>
             </div>
 
-            <!-- Hologram Stream Deck -->
             <div class="hologram-live-widget" id="hologram-live-widget">
                 <div class="holo-header">
                     <span class="holo-live-dot" id="holo-dot"></span>
@@ -81,16 +65,13 @@
             </div>
         </section>
 
-        <!-- Right Side: Spatial Social Navigation (Names Only) -->
         <nav class="navigation-section" aria-label="Social Navigation">
             <div class="nav-nodes-container" id="nav-nodes-container">
                 <a href="#" class="nav-node" data-id="01" data-name="Discord" data-brand="discord">
                     <div class="node-line-top"></div>
                     <div class="node-content">
                         <span class="node-id">01</span>
-                        <div class="node-text-block">
-                            <span class="node-title">DISCORD</span>
-                        </div>
+                        <div class="node-text-block"><span class="node-title">DISCORD</span></div>
                         <span class="node-arrow">↗</span>
                     </div>
                     <div class="node-line-bottom"></div>
@@ -100,9 +81,7 @@
                     <div class="node-line-top"></div>
                     <div class="node-content">
                         <span class="node-id">02</span>
-                        <div class="node-text-block">
-                            <span class="node-title">YOUTUBE</span>
-                        </div>
+                        <div class="node-text-block"><span class="node-title">YOUTUBE</span></div>
                         <span class="node-arrow">↗</span>
                     </div>
                     <div class="node-line-bottom"></div>
@@ -112,9 +91,7 @@
                     <div class="node-line-top"></div>
                     <div class="node-content">
                         <span class="node-id">03</span>
-                        <div class="node-text-block">
-                            <span class="node-title">TIKTOK</span>
-                        </div>
+                        <div class="node-text-block"><span class="node-title">TIKTOK</span></div>
                         <span class="node-arrow">↗</span>
                     </div>
                     <div class="node-line-bottom"></div>
@@ -124,9 +101,7 @@
                     <div class="node-line-top"></div>
                     <div class="node-content">
                         <span class="node-id">04</span>
-                        <div class="node-text-block">
-                            <span class="node-title">INSTAGRAM</span>
-                        </div>
+                        <div class="node-text-block"><span class="node-title">INSTAGRAM</span></div>
                         <span class="node-arrow">↗</span>
                     </div>
                     <div class="node-line-bottom"></div>
@@ -136,9 +111,7 @@
                     <div class="node-line-top"></div>
                     <div class="node-content">
                         <span class="node-id">05</span>
-                        <div class="node-text-block">
-                            <span class="node-title">KICK</span>
-                        </div>
+                        <div class="node-text-block"><span class="node-title">KICK</span></div>
                         <span class="node-arrow">↗</span>
                     </div>
                     <div class="node-line-bottom"></div>
@@ -148,7 +121,6 @@
 
     </main>
 
-    <!-- Holographic Platform Info Card (Popup with Dynamic Brand Colors) -->
     <div class="holo-preview-card" id="holo-preview-card" aria-hidden="true">
         <div class="card-glow-bg"></div>
         <div class="card-header-bar">
@@ -169,17 +141,14 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="nexus-footer">
         <div class="footer-line"><span class="copy-symbol">©</span> 2026 <span class="footer-brand">MOHAB</span>. All rights reserved.</div>
         <div class="footer-subline">Developed By <span class="footer-author">MOHAB</span></div>
     </footer>
 
-    <!-- Interactive Cursor System -->
     <div class="cursor-core" id="cursor-core"></div>
     <div class="cursor-halo" id="cursor-halo"></div>
 
-    <!-- Intro Curtain -->
     <div class="intro-curtain" id="intro-curtain">
         <div class="intro-point" id="intro-point"></div>
     </div>

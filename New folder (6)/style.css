@@ -1,8 +1,3 @@
-/* ==========================================================================
-   NEXUS — EXPERIMENTAL GAMING DIGITAL IDENTITY
-   style.css — Architecture & Design Token System
-   ========================================================================== */
-
 :root {
     --black: #030303;
     --surface: #080808;
@@ -13,7 +8,6 @@
     --accent: #B6FF00;
     --accent-glow: rgba(182, 255, 0, 0.15);
 
-    /* Brand Colors */
     --c-discord: #5865F2;
     --c-youtube: #FF0000;
     --c-tiktok: #FE2C55;
@@ -21,10 +15,8 @@
     --c-kick: #53FC18;
 
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    
     --spacing-md: 2rem;
     --spacing-lg: 4rem;
-
     --radius-md: 8px;
     --ease-smooth: cubic-bezier(.16, 1, .3, 1);
     --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
@@ -36,7 +28,6 @@
     --z-cursor: 100;
 }
 
-/* RESET */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -61,7 +52,6 @@ body {
     align-items: center;
 }
 
-/* BACKGROUND & ATMOSPHERE */
 #nexus-canvas {
     position: fixed;
     top: 0;
@@ -97,7 +87,6 @@ body {
     opacity: 0.15;
 }
 
-/* EDGE HUD */
 .hud {
     position: fixed;
     z-index: var(--z-hud);
@@ -130,7 +119,6 @@ body {
     50% { opacity: 1; transform: scale(1.2); }
 }
 
-/* APP LAYOUT */
 .nexus-app {
     position: relative;
     width: 100%;
@@ -152,7 +140,6 @@ body {
     transform: scale(1);
 }
 
-/* LEFT SIDE */
 .identity-section {
     display: flex;
     flex-direction: column;
@@ -241,12 +228,7 @@ body {
     z-index: 6;
 }
 
-.avatar-image-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(20%) contrast(110%);
-}
+.avatar-image-wrap img { width: 100%; height: 100%; object-fit: cover; }
 
 .identity-typography {
     display: flex;
@@ -283,7 +265,6 @@ body {
     font-family: monospace;
 }
 
-/* HOLOGRAPHIC STREAM WIDGET */
 .hologram-live-widget {
     width: 100%;
     max-width: 380px;
@@ -398,7 +379,6 @@ body {
     letter-spacing: 0.15em;
 }
 
-/* RIGHT SIDE: NAVIGATION SECTION */
 .navigation-section {
     display: flex;
     flex-direction: column;
@@ -480,7 +460,6 @@ body {
     transition: transform 0.3s var(--ease-smooth), color 0.3s ease;
 }
 
-/* Brand Hover Rules for Links */
 .nav-node[data-brand="discord"]:hover .node-line-top, .nav-node[data-brand="discord"]:hover .node-line-bottom { background-color: rgba(88, 101, 242, 0.4); }
 .nav-node[data-brand="discord"]:hover .node-id, .nav-node[data-brand="discord"]:hover .node-title, .nav-node[data-brand="discord"]:hover .node-arrow { color: var(--c-discord); }
 
@@ -500,7 +479,6 @@ body {
 .nav-node:hover .node-title { transform: translateX(-8px); }
 .nav-node:hover .node-arrow { transform: translate(-4px, -4px); }
 
-/* HOLOGRAPHIC PREVIEW CARD (POPUP WITH DYNAMIC BRAND COLORS) */
 .holo-preview-card {
     position: fixed;
     width: 280px;
@@ -522,7 +500,6 @@ body {
     transform: perspective(1000px) rotateY(0deg) scale(1) translate(0px, 0px);
 }
 
-/* Dynamic Brand Matching for Card */
 .holo-preview-card[data-active-brand="discord"] { border-color: var(--c-discord); box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 25px rgba(88, 101, 242, 0.3); }
 .holo-preview-card[data-active-brand="discord"] .card-live-status, .holo-preview-card[data-active-brand="discord"] .card-avatar-wrap { border-color: var(--c-discord); color: var(--c-discord); }
 
@@ -601,7 +578,6 @@ body {
     letter-spacing: 0.15em;
 }
 
-/* FOOTER */
 .nexus-footer {
     position: fixed;
     bottom: 1.2rem;
@@ -625,7 +601,6 @@ body {
 .footer-brand, .footer-author { color: var(--accent); font-weight: bold; text-shadow: 0 0 10px rgba(182, 255, 0, 0.4); }
 .footer-subline { color: #666; font-size: 0.6rem; letter-spacing: 0.12em; }
 
-/* CURSOR */
 .cursor-core {
     position: fixed;
     top: 0;
@@ -653,7 +628,6 @@ body {
     transform: translate(-50%, -50%);
 }
 
-/* INTRO */
 .intro-curtain {
     position: fixed;
     inset: 0;
@@ -678,7 +652,6 @@ body {
 .intro-curtain.fade-out { opacity: 0; }
 .intro-curtain.fade-out .intro-point { transform: scale(400); opacity: 0; }
 
-/* RESPONSIVE */
 @media (max-width: 1024px) {
     .nexus-app {
         grid-template-columns: 1fr;
