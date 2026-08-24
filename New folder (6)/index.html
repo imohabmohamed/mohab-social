@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOHAB — Digital Player</title>
+    <title>Mohab</title>
     <meta name="description" content="MOHAB — Gamer, creator and digital player.">
     <meta name="theme-color" content="#030303">
     
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="assets/avatar.jpg">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -50,7 +52,6 @@
                     <span class="holo-live-dot" id="holo-dot"></span>
                     <span class="holo-title-text" id="holo-stream-title">OFFLINE</span>
                     <span class="holo-viewers-badge" id="holo-viewers-badge" style="display: none;">👁 <span id="viewer-count">0</span></span>
-                    <span class="holo-tag" id="holo-status-tag">KICK // OFF</span>
                 </div>
                 <div class="holo-screen-frame" id="holo-screen-frame">
                     <div class="offline-placeholder" id="offline-placeholder">
@@ -116,6 +117,29 @@
                     </div>
                     <div class="node-line-bottom"></div>
                 </a>
+
+                <a href="#" class="nav-node" data-id="06" data-name="WHATSAPP CHANNEL" data-brand="whatsapp">
+                    <div class="node-line-top"></div>
+                    <div class="node-content">
+                        <span class="node-id">06</span>
+                        <div class="node-text-block"><span class="node-title">WHATSAPP CHANNEL</span></div>
+                        <span class="node-arrow">↗</span>
+                    </div>
+                    <div class="node-line-bottom"></div>
+                </a>
+
+                <a href="#" class="nav-node disabled-node" data-id="07" data-name="Donation" data-brand="donation">
+                    <div class="node-line-top"></div>
+                    <div class="node-content">
+                        <span class="node-id">07</span>
+                        <div class="node-text-block">
+                            <span class="node-title">DONATION</span>
+                            <span class="node-sub-status">Unavailable Now</span>
+                        </div>
+                        <span class="node-arrow">✕</span>
+                    </div>
+                    <div class="node-line-bottom"></div>
+                </a>
             </div>
         </nav>
 
@@ -123,10 +147,6 @@
 
     <div class="holo-preview-card" id="holo-preview-card" aria-hidden="true">
         <div class="card-glow-bg"></div>
-        <div class="card-header-bar">
-            <span class="card-sys-id" id="card-sys-id">SYS // 01</span>
-            <span class="card-live-status">ACTIVE</span>
-        </div>
         <div class="card-content-body">
             <div class="card-avatar-wrap">
                 <img id="card-platform-avatar" src="assets/avatar.jpg" alt="Avatar">

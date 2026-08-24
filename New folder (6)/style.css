@@ -1,3 +1,8 @@
+/* ==========================================================================
+   NEXUS — EXPERIMENTAL GAMING DIGITAL IDENTITY
+   style.css — Final Version with Clear Sub-status for Donation
+   ========================================================================== */
+
 :root {
     --black: #030303;
     --surface: #080808;
@@ -5,14 +10,17 @@
     --white: #F5F5F5;
     --muted: #777;
     --line: rgba(255,255,255,.07);
-    --accent: #B6FF00;
-    --accent-glow: rgba(182, 255, 0, 0.15);
+    
+    --accent: #FF0000;
+    --accent-glow: rgba(255, 0, 0, 0.2);
 
+    /* Brand Colors */
     --c-discord: #5865F2;
     --c-youtube: #FF0000;
     --c-tiktok: #FE2C55;
     --c-instagram: #E1306C;
     --c-kick: #53FC18;
+    --c-whatsapp: #25D366;
 
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     --spacing-md: 2rem;
@@ -100,10 +108,14 @@ body {
 
 .hud-top-right { top: 2rem; right: 2rem; display: flex; align-items: center; gap: 6px; }
 
+#top-status-text {
+    color: #FF0000 !important;
+}
+
 .status-dot {
     width: 6px;
     height: 6px;
-    background-color: var(--muted);
+    background-color: #FF0000;
     border-radius: 50%;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -119,7 +131,6 @@ body {
     50% { opacity: 1; transform: scale(1.2); }
 }
 
-/* تأثير التوهج والنور لكلمة لايف */
 .live-glow-text {
     color: #53FC18 !important;
     font-weight: bold;
@@ -254,6 +265,8 @@ body {
     font-weight: 700;
     line-height: 0.9;
     color: var(--white);
+    -webkit-text-stroke: 1px rgba(255, 0, 0, 0.8);
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
     cursor: default;
 }
 
@@ -278,12 +291,11 @@ body {
     font-family: monospace;
 }
 
-/* تكبير شاشة البث لتصبح واضحة وبارزة */
 .hologram-live-widget {
     width: 100%;
     max-width: 440px;
     background: rgba(5, 5, 5, 0.92);
-    border: 1px solid rgba(83, 252, 24, 0.35);
+    border: 1px solid rgba(255, 0, 0, 0.35);
     border-radius: var(--radius-md);
     padding: 10px;
     z-index: 50;
@@ -320,7 +332,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--muted);
+    color: #FF0000;
     font-weight: bold;
     max-width: 150px;
 }
@@ -340,15 +352,6 @@ body {
     display: flex;
     align-items: center;
     gap: 4px;
-}
-
-.holo-tag {
-    margin-left: auto;
-    font-size: 0.5rem;
-    color: var(--muted);
-    border: 1px solid var(--line);
-    padding: 1px 4px;
-    border-radius: 2px;
 }
 
 .holo-screen-frame {
@@ -378,8 +381,8 @@ body {
     background: radial-gradient(circle, #121212 0%, #030303 100%);
 }
 
-.offline-placeholder span { font-size: 0.75rem; letter-spacing: 0.15em; color: #777; font-weight: bold; }
-.offline-placeholder p { font-size: 0.55rem; letter-spacing: 0.1em; color: #555; }
+.offline-placeholder span { font-size: 0.75rem; letter-spacing: 0.15em; color: #FF0000; font-weight: bold; }
+.offline-placeholder p { font-size: 0.55rem; letter-spacing: 0.1em; color: var(--muted); }
 .holo-screen-frame iframe { width: 100%; height: 100%; border: none; pointer-events: none; }
 
 .holo-footer {
@@ -422,7 +425,7 @@ body {
     flex-direction: column;
     text-decoration: none;
     color: var(--white);
-    padding: 1.4rem 0;
+    padding: 1rem 0;
     transition: transform 0.3s var(--ease-smooth), padding-right 0.3s var(--ease-smooth);
 }
 
@@ -449,7 +452,7 @@ body {
 .node-id {
     font-family: monospace;
     font-size: 0.75rem;
-    color: var(--muted);
+    color: #FF0000;
     letter-spacing: 0.1em;
     transition: color 0.3s ease;
 }
@@ -459,35 +462,68 @@ body {
     flex-direction: column;
     flex-grow: 1;
     margin-left: 2rem;
+    gap: 3px;
 }
 
 .node-title {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
     font-weight: 700;
     letter-spacing: -0.03em;
-    transition: color 0.3s ease, transform 0.3s var(--ease-smooth);
+    color: var(--white);
+    -webkit-text-stroke: 1px rgba(255, 0, 0, 0.8);
+    text-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+    transition: color 0.3s ease, transform 0.3s var(--ease-smooth), -webkit-text-stroke 0.3s ease;
+}
+
+/* تنسيق جملة Unavailable Now بوضوح وتوهج */
+.node-sub-status {
+    font-size: 0.65rem;
+    font-family: monospace;
+    letter-spacing: 0.15em;
+    color: #ff3333;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
 }
 
 .node-arrow {
     font-size: 1.2rem;
-    color: var(--muted);
+    color: #FF0000;
     transition: transform 0.3s var(--ease-smooth), color 0.3s ease;
 }
 
+/* زر Donation المعطل (لا يفتح لينكات، لا يكبر، ولا يتأثر بالبلور) */
+.nav-node.disabled-node {
+    opacity: 0.7;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.nav-nodes-container.has-hover .nav-node.disabled-node {
+    filter: none !important;
+    opacity: 0.7;
+}
+.nav-node.disabled-node:hover {
+    padding-right: 0 !important;
+    transform: none !important;
+}
+
 .nav-node[data-brand="discord"]:hover .node-line-top, .nav-node[data-brand="discord"]:hover .node-line-bottom { background-color: rgba(88, 101, 242, 0.4); }
-.nav-node[data-brand="discord"]:hover .node-id, .nav-node[data-brand="discord"]:hover .node-title, .nav-node[data-brand="discord"]:hover .node-arrow { color: var(--c-discord); }
+.nav-node[data-brand="discord"]:hover .node-id, .nav-node[data-brand="discord"]:hover .node-title, .nav-node[data-brand="discord"]:hover .node-arrow { color: var(--c-discord); -webkit-text-stroke: 0px; text-shadow: 0 0 10px rgba(88,101,242,0.5); }
 
 .nav-node[data-brand="youtube"]:hover .node-line-top, .nav-node[data-brand="youtube"]:hover .node-line-bottom { background-color: rgba(255, 0, 0, 0.4); }
-.nav-node[data-brand="youtube"]:hover .node-id, .nav-node[data-brand="youtube"]:hover .node-title, .nav-node[data-brand="youtube"]:hover .node-arrow { color: var(--c-youtube); }
+.nav-node[data-brand="youtube"]:hover .node-id, .nav-node[data-brand="youtube"]:hover .node-title, .nav-node[data-brand="youtube"]:hover .node-arrow { color: var(--c-youtube); -webkit-text-stroke: 0px; text-shadow: 0 0 10px rgba(255,0,0,0.5); }
 
 .nav-node[data-brand="tiktok"]:hover .node-line-top, .nav-node[data-brand="tiktok"]:hover .node-line-bottom { background-color: rgba(254, 44, 85, 0.4); }
-.nav-node[data-brand="tiktok"]:hover .node-id, .nav-node[data-brand="tiktok"]:hover .node-title, .nav-node[data-brand="tiktok"]:hover .node-arrow { color: var(--c-tiktok); }
+.nav-node[data-brand="tiktok"]:hover .node-id, .nav-node[data-brand="tiktok"]:hover .node-title, .nav-node[data-brand="tiktok"]:hover .node-arrow { color: var(--c-tiktok); -webkit-text-stroke: 0px; text-shadow: 0 0 10px rgba(254,44,85,0.5); }
 
 .nav-node[data-brand="instagram"]:hover .node-line-top, .nav-node[data-brand="instagram"]:hover .node-line-bottom { background-color: rgba(225, 48, 108, 0.4); }
-.nav-node[data-brand="instagram"]:hover .node-id, .nav-node[data-brand="instagram"]:hover .node-title, .nav-node[data-brand="instagram"]:hover .node-arrow { color: var(--c-instagram); }
+.nav-node[data-brand="instagram"]:hover .node-id, .nav-node[data-brand="instagram"]:hover .node-title, .nav-node[data-brand="instagram"]:hover .node-arrow { color: var(--c-instagram); -webkit-text-stroke: 0px; text-shadow: 0 0 10px rgba(225,48,108,0.5); }
 
 .nav-node[data-brand="kick"]:hover .node-line-top, .nav-node[data-brand="kick"]:hover .node-line-bottom { background-color: rgba(83, 252, 24, 0.4); }
-.nav-node[data-brand="kick"]:hover .node-id, .nav-node[data-brand="kick"]:hover .node-title, .nav-node[data-brand="kick"]:hover .node-arrow { color: var(--c-kick); }
+.nav-node[data-brand="kick"]:hover .node-id, .nav-node[data-brand="kick"]:hover .node-title, .nav-node[data-brand="kick"]:hover .node-arrow { color: var(--c-kick); -webkit-text-stroke: 0px; text-shadow: 0 0 10px rgba(83,252,24,0.5); }
+
+.nav-node[data-brand="whatsapp"]:hover .node-line-top, .nav-node[data-brand="whatsapp"]:hover .node-line-bottom { background-color: rgba(37, 211, 102, 0.4); }
+.nav-node[data-brand="whatsapp"]:hover .node-id, .nav-node[data-brand="whatsapp"]:hover .node-title, .nav-node[data-brand="whatsapp"]:hover .node-arrow { color: var(--c-whatsapp); -webkit-text-stroke: 0px; text-shadow: 0 0 10px rgba(37,211,102,0.5); }
 
 .nav-node:hover { padding-right: 15px; }
 .nav-node:hover .node-title { transform: translateX(-8px); }
@@ -495,11 +531,11 @@ body {
 
 .holo-preview-card {
     position: fixed;
-    width: 280px;
+    width: 260px;
     background: rgba(8, 8, 8, 0.95);
     border: 1px solid var(--accent);
     border-radius: var(--radius-md);
-    padding: 14px;
+    padding: 16px;
     z-index: 200;
     pointer-events: none;
     opacity: 0;
@@ -515,32 +551,22 @@ body {
 }
 
 .holo-preview-card[data-active-brand="discord"] { border-color: var(--c-discord); box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 25px rgba(88, 101, 242, 0.3); }
-.holo-preview-card[data-active-brand="discord"] .card-live-status, .holo-preview-card[data-active-brand="discord"] .card-avatar-wrap { border-color: var(--c-discord); color: var(--c-discord); }
+.holo-preview-card[data-active-brand="discord"] .card-avatar-wrap { border-color: var(--c-discord); }
 
 .holo-preview-card[data-active-brand="youtube"] { border-color: var(--c-youtube); box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 25px rgba(255, 0, 0, 0.3); }
-.holo-preview-card[data-active-brand="youtube"] .card-live-status, .holo-preview-card[data-active-brand="youtube"] .card-avatar-wrap { border-color: var(--c-youtube); color: var(--c-youtube); }
+.holo-preview-card[data-active-brand="youtube"] .card-avatar-wrap { border-color: var(--c-youtube); }
 
 .holo-preview-card[data-active-brand="tiktok"] { border-color: var(--c-tiktok); box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 25px rgba(254, 44, 85, 0.3); }
-.holo-preview-card[data-active-brand="tiktok"] .card-live-status, .holo-preview-card[data-active-brand="tiktok"] .card-avatar-wrap { border-color: var(--c-tiktok); color: var(--c-tiktok); }
+.holo-preview-card[data-active-brand="tiktok"] .card-avatar-wrap { border-color: var(--c-tiktok); }
 
 .holo-preview-card[data-active-brand="instagram"] { border-color: var(--c-instagram); box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 25px rgba(225, 48, 108, 0.3); }
-.holo-preview-card[data-active-brand="instagram"] .card-live-status, .holo-preview-card[data-active-brand="instagram"] .card-avatar-wrap { border-color: var(--c-instagram); color: var(--c-instagram); }
+.holo-preview-card[data-active-brand="instagram"] .card-avatar-wrap { border-color: var(--c-instagram); }
 
 .holo-preview-card[data-active-brand="kick"] { border-color: var(--c-kick); box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 25px rgba(83, 252, 24, 0.3); }
-.holo-preview-card[data-active-brand="kick"] .card-live-status, .holo-preview-card[data-active-brand="kick"] .card-avatar-wrap { border-color: var(--c-kick); color: var(--c-kick); }
+.holo-preview-card[data-active-brand="kick"] .card-avatar-wrap { border-color: var(--c-kick); }
 
-.card-header-bar {
-    display: flex;
-    justify-content: space-between;
-    font-family: monospace;
-    font-size: 0.55rem;
-    color: var(--muted);
-    margin-bottom: 10px;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 4px;
-}
-
-.card-live-status { animation: pulse-dot 1.5s infinite ease-in-out; }
+.holo-preview-card[data-active-brand="whatsapp"] { border-color: var(--c-whatsapp); box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 25px rgba(37, 211, 102, 0.3); }
+.holo-preview-card[data-active-brand="whatsapp"] .card-avatar-wrap { border-color: var(--c-whatsapp); }
 
 .card-content-body {
     display: flex;
@@ -549,8 +575,8 @@ body {
 }
 
 .card-avatar-wrap {
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: 1px solid var(--accent);
     overflow: hidden;
@@ -563,27 +589,27 @@ body {
 .card-info-wrap {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
 }
 
 .card-info-wrap h3 {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--white);
     letter-spacing: 0.05em;
 }
 
 .card-info-wrap p {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: var(--muted);
     font-family: monospace;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
 }
 
 .card-footer-bar {
-    margin-top: 10px;
-    padding-top: 6px;
+    margin-top: 12px;
+    padding-top: 8px;
     border-top: 1px solid var(--line);
     font-family: monospace;
     font-size: 0.5rem;
@@ -612,7 +638,7 @@ body {
 }
 
 .footer-line { color: #888; }
-.footer-brand, .footer-author { color: var(--accent); font-weight: bold; text-shadow: 0 0 10px rgba(182, 255, 0, 0.4); }
+.footer-brand, .footer-author { color: var(--accent); font-weight: bold; text-shadow: 0 0 10px rgba(255, 0, 0, 0.4); }
 .footer-subline { color: #666; font-size: 0.6rem; letter-spacing: 0.12em; }
 
 .cursor-core {
@@ -635,7 +661,7 @@ body {
     left: 0;
     width: 40px;
     height: 40px;
-    border: 1px solid rgba(182, 255, 0, 0.25);
+    border: 1px solid rgba(255, 0, 0, 0.25);
     border-radius: 50%;
     z-index: var(--z-cursor);
     pointer-events: none;
