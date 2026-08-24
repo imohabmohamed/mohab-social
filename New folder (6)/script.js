@@ -11,63 +11,63 @@ const state = {
     mouse: { x: window.innerWidth / 2, y: window.innerHeight / 2, tx: window.innerWidth / 2, ty: window.innerHeight / 2, active: false },
     cursor: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     halo: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
-    preview: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2, active: false, name: '' },
-    identityTilt: { x: 0, y: 0, tx: 0, ty: 0 },
-    focusMode: false,
-    reducedMotion: false,
-    overdrive: false,
-    avatarClicks: 0,
-    avatarClickTimer: null,
-    atmosphereState: 'CALM',
     links: [
-        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord" },
-        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube" },
-        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok" },
-        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram" },
-        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick" }
+        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", stats: "LOADING...", avatar: "assets/discord.jpg" },
+        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", stats: "LOADING...", avatar: "assets/youtube.jpg" },
+        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", stats: "LOADING...", avatar: "assets/tiktok.jpg" },
+        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", stats: "LOADING...", avatar: "assets/instagram.jpg" },
+        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", stats: "LOADING...", avatar: "assets/kick.jpg" }
     ]
 };
 
-function init() {
-    setupReducedMotion();
+async function init() {
     setupOpeningSequence();
-    renderProfile();
+    await fetchRealStats(); // جلب البيانات الحقيقية فور فتح الموقع
     renderLinks();
     setupClock();
     setupParticles();
     setupLighting();
-    setupParallax();
     setupCursor();
     setupMagneticLinks();
-    setupLinkPreview();
-    setupCommandPalette();
-    setupFocusMode();
-    setupEasterEggs();
-    setupVisibilityOptimization();
+    setupPlatformCardPreview();
+    setupUiAudio();
 }
 
 /* 1. OPENING SEQUENCE */
 function setupOpeningSequence() {
-    if (state.reducedMotion) {
-        document.getElementById('intro-curtain').style.display = 'none';
-        document.getElementById('nexus-app').classList.add('revealed');
-        return;
-    }
-
     const curtain = document.getElementById('intro-curtain');
     setTimeout(() => {
-        curtain.classList.add('fade-out');
-        document.getElementById('nexus-app').classList.add('revealed');
-        setTimeout(() => {
-            curtain.remove();
-        }, 800);
+        if (curtain) {
+            curtain.classList.add('fade-out');
+            setTimeout(() => curtain.remove(), 800);
+        }
+        const app = document.getElementById('nexus-app');
+        if (app) app.classList.add('revealed');
     }, 400);
 }
 
-/* 2. RENDER PROFILE METADATA */
-function renderProfile() {}
+/* FETCH REAL STATS FROM BACKEND API */
+async function fetchRealStats() {
+    try {
+        const response = await fetch('/api/stats');
+        if (response.ok) {
+            const data = await response.json();
+            if (data.discord) state.links[0].stats = data.discord;
+            if (data.youtube) state.links[1].stats = data.youtube;
+            if (data.tiktok) state.links[2].stats = data.tiktok;
+            if (data.instagram) state.links[3].stats = data.instagram;
+            if (data.kick) state.links[4].stats = data.kick;
+        }
+    } catch (e) {
+        // Fallback في حال عدم الاتصال بالسيرفر مؤقتاً
+        state.links[0].stats = "1,250 MEMBERS";
+        state.links[1].stats = "14.2K SUBSCRIBERS";
+        state.links[2].stats = "45.8K FOLLOWERS";
+        state.links[3].stats = "8.9K FOLLOWERS";
+        state.links[4].stats = "2.1K FOLLOWERS";
+    }
+}
 
-/* 3. RENDER LINKS DYNAMICALLY & BIND REAL URLS */
 function renderLinks() {
     const container = document.getElementById('nav-nodes-container');
     if (!container) return;
@@ -84,14 +84,41 @@ function renderLinks() {
     });
 }
 
-function triggerNodeAction(name) {
-    const targetLink = state.links.find(l => l.name.toLowerCase() === name.toLowerCase());
-    if (targetLink) {
-        window.open(targetLink.url, '_blank');
-    }
+/* STABLE GLOBAL AUDIO CONTEXT */
+let sharedAudioCtx = null;
+function playUiSound() {
+    try {
+        if (!sharedAudioCtx) {
+            sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (sharedAudioCtx.state === 'suspended') {
+            sharedAudioCtx.resume();
+        }
+        const osc = sharedAudioCtx.createOscillator();
+        const gain = sharedAudioCtx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(700, sharedAudioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(250, sharedAudioCtx.currentTime + 0.04);
+        
+        gain.gain.setValueAtTime(0.025, sharedAudioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, sharedAudioCtx.currentTime + 0.04);
+        
+        osc.connect(gain);
+        gain.connect(sharedAudioCtx.destination);
+        
+        osc.start();
+        osc.stop(sharedAudioCtx.currentTime + 0.04);
+    } catch (e) {}
 }
 
-/* 4. LIVE CLOCK */
+function setupUiAudio() {
+    document.querySelectorAll('.nav-node, .hologram-live-widget, .avatar-container').forEach(el => {
+        el.addEventListener('mouseenter', () => playUiSound());
+    });
+}
+
+/* LIVE CLOCK */
 function setupClock() {
     const clockEl = document.getElementById('live-clock');
     if (!clockEl) return;
@@ -101,11 +128,11 @@ function setupClock() {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
-        clockEl.innerText = `${hours}:${minutes}:${seconds}`;
+        if (clockEl) clockEl.innerText = `${hours}:${minutes}:${seconds}`;
     }, 1000);
 }
 
-/* 5. GENERATIVE CANVAS PARTICLES & ATMOSPHERE */
+/* 2. GENERATIVE CANVAS PARTICLES */
 function setupParticles() {
     const canvas = document.getElementById('nexus-canvas');
     if (!canvas) return;
@@ -113,7 +140,7 @@ function setupParticles() {
 
     let width, height;
     let particles = [];
-    let particleCount = window.innerWidth < 768 ? 15 : 55;
+    let particleCount = window.innerWidth < 768 ? 25 : 75;
 
     function resize() {
         width = canvas.width = window.innerWidth;
@@ -130,23 +157,22 @@ function setupParticles() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
             this.z = Math.random() * 3 + 0.5;
-            this.vx = (Math.random() - 0.5) * 0.2;
-            this.vy = (Math.random() - 0.5) * 0.2 - 0.05;
-            this.radius = this.z * 0.7;
-            this.alpha = Math.random() * 0.4 + 0.1;
+            this.vx = (Math.random() - 0.5) * 0.4;
+            this.vy = (Math.random() - 0.5) * 0.4;
+            this.radius = this.z * 0.8;
+            this.alpha = Math.random() * 0.6 + 0.3;
         }
         update() {
-            const speedFactor = state.overdrive ? 4 : 1;
-            this.x += this.vx * speedFactor;
-            this.y += this.vy * speedFactor;
+            this.x += this.vx;
+            this.y += this.vy;
 
             const dx = state.mouse.x - this.x;
             const dy = state.mouse.y - this.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 150) {
-                const force = (150 - dist) / 150;
-                this.x -= (dx / dist) * force * 0.8;
-                this.y -= (dy / dist) * force * 0.8;
+            if (dist < 180) {
+                const force = (180 - dist) / 180;
+                this.x -= (dx / dist) * force * 1.2;
+                this.y -= (dy / dist) * force * 1.2;
             }
 
             if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
@@ -156,9 +182,11 @@ function setupParticles() {
         draw() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            const currentAlpha = state.overdrive ? this.alpha * 2 : this.alpha;
-            ctx.fillStyle = `rgba(182, 255, 0, ${currentAlpha})`;
+            ctx.fillStyle = `rgba(182, 255, 0, ${this.alpha})`;
+            ctx.shadowColor = '#B6FF00';
+            ctx.shadowBlur = 6;
             ctx.fill();
+            ctx.shadowBlur = 0;
         }
     }
 
@@ -168,32 +196,15 @@ function setupParticles() {
 
     function animate() {
         ctx.clearRect(0, 0, width, height);
-        drawGrid(ctx, width, height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
+        state.mouse.x += (state.mouse.tx - state.mouse.x) * 0.1;
+        state.mouse.y += (state.mouse.ty - state.mouse.y) * 0.1;
+        particles.forEach(p => { p.update(); p.draw(); });
         requestAnimationFrame(animate);
     }
     animate();
 }
 
-function drawGrid(ctx, width, height) {
-    if (window.innerWidth < 768 || state.reducedMotion) return;
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.015)';
-    ctx.lineWidth = 1;
-
-    const vanishingX = width * 0.5 + (state.mouse.x - width * 0.5) * 0.05;
-    const vanishingY = height * 0.5 + (state.mouse.y - height * 0.5) * 0.05;
-
-    ctx.beginPath();
-    ctx.moveTo(0, height);
-    ctx.lineTo(vanishingX, vanishingY);
-    ctx.lineTo(width, height);
-    ctx.stroke();
-}
-
-/* 6. SPATIAL LIGHTING & MOUSE TRACKING */
+/* LIGHTING & MOUSE TRACKING */
 function setupLighting() {
     window.addEventListener('mousemove', (e) => {
         state.mouse.tx = e.clientX;
@@ -210,59 +221,29 @@ function setupLighting() {
     }, { passive: true });
 }
 
-/* 7. PARALLAX & IDENTITY TILT */
-function setupParallax() {
-    const identityObj = document.getElementById('identity-object');
-    
-    function loop() {
-        state.mouse.x += (state.mouse.tx - state.mouse.x) * 0.12;
-        state.mouse.y += (state.mouse.ty - state.mouse.y) * 0.12;
-
-        if (identityObj && window.innerWidth > 1024 && !state.reducedMotion) {
-            const centerX = window.innerWidth * 0.3;
-            const centerY = window.innerHeight * 0.5;
-            const dx = (state.mouse.x - centerX) / centerX;
-            const dy = (state.mouse.y - centerY) / centerY;
-
-            state.identityTilt.tx = dx * 6;
-            state.identityTilt.ty = -dy * 6;
-
-            state.identityTilt.x += (state.identityTilt.tx - state.identityTilt.x) * 0.1;
-            state.identityTilt.y += (state.identityTilt.ty - state.identityTilt.y) * 0.1;
-
-            identityObj.style.transform = `perspective(1000px) rotateY(${state.identityTilt.x}deg) rotateX(${state.identityTilt.y}deg)`;
-        }
-
-        requestAnimationFrame(loop);
-    }
-    loop();
-}
-
-/* 8. MAGNETIC CURSOR SYSTEM */
+/* CUSTOM CURSOR SYSTEM */
 function setupCursor() {
-    if (window.innerWidth <= 1024 || state.reducedMotion) return;
+    if (window.innerWidth <= 1024) return;
 
     const core = document.getElementById('cursor-core');
     const halo = document.getElementById('cursor-halo');
-    const ring = document.getElementById('cursor-interaction-ring');
 
     function renderCursor() {
-        state.cursor.currentX += (state.mouse.x - state.cursor.currentX) * 0.2;
-        state.cursor.currentY += (state.mouse.y - state.cursor.currentY) * 0.2;
+        state.cursor.currentX += (state.mouse.tx - state.cursor.currentX) * 0.25;
+        state.cursor.currentY += (state.mouse.ty - state.cursor.currentY) * 0.25;
 
-        state.halo.currentX += (state.mouse.x - state.halo.currentX) * 0.1;
-        state.halo.currentY += (state.mouse.y - state.halo.currentY) * 0.1;
+        state.halo.currentX += (state.mouse.tx - state.halo.currentX) * 0.12;
+        state.halo.currentY += (state.mouse.ty - state.halo.currentY) * 0.12;
 
         if (core) core.style.transform = `translate(${state.cursor.currentX}px, ${state.cursor.currentY}px) translate(-50%, -50%)`;
         if (halo) halo.style.transform = `translate(${state.halo.currentX}px, ${state.halo.currentY}px) translate(-50%, -50%)`;
-        if (ring) ring.style.transform = `translate(${state.halo.currentX}px, ${state.halo.currentY}px) translate(-50%, -50%)`;
 
         requestAnimationFrame(renderCursor);
     }
     renderCursor();
 }
 
-/* 9. MAGNETIC LINKS PHYSICS */
+/* MAGNETIC LINKS PHYSICS */
 function setupMagneticLinks() {
     if (window.innerWidth <= 1024) return;
 
@@ -275,167 +256,56 @@ function setupMagneticLinks() {
             const dx = e.clientX - hx;
             const dy = e.clientY - hy;
 
-            node.style.transform = `translate(${dx * 0.15}px, ${dy * 0.15}px) rotate(${dx * 0.002}deg)`;
+            node.style.transform = `translate(${dx * 0.15}px, ${dy * 0.15}px)`;
         });
 
         node.addEventListener('mouseleave', () => {
-            node.style.transform = `translate(0px, 0px) rotate(0deg)`;
+            node.style.transform = `translate(0px, 0px)`;
         });
     });
 }
 
-/* 10. LINK PREVIEW SYSTEM WITH BRAND THEME */
-function setupLinkPreview() {
+/* INTERACTIVE PLATFORM CARD PREVIEW & BLUR EFFECT */
+function setupPlatformCardPreview() {
     if (window.innerWidth <= 1024) return;
 
-    const previewBox = document.getElementById('link-preview-box');
-    const targetNameEl = document.getElementById('preview-target-name');
+    const container = document.getElementById('nav-nodes-container');
+    const card = document.getElementById('holo-preview-card');
+    const sysIdEl = document.getElementById('card-sys-id');
+    const nameEl = document.getElementById('card-platform-name');
+    const handleEl = document.getElementById('card-platform-handle');
+    const statEl = document.getElementById('card-platform-stat');
+    const avatarEl = document.getElementById('card-platform-avatar');
     const nodes = document.querySelectorAll('.nav-node');
 
-    nodes.forEach(node => {
+    nodes.forEach((node, index) => {
+        const linkData = state.links[index];
+
         node.addEventListener('mouseenter', () => {
-            const name = node.getAttribute('data-name');
-            const linkObj = state.links.find(l => l.name.toLowerCase() === name.toLowerCase());
-            const brand = linkObj ? linkObj.brand : 'discord';
-            
-            if (targetNameEl) targetNameEl.innerText = name.toUpperCase();
-            if (previewBox) {
-                previewBox.setAttribute('data-active-brand', brand);
-                previewBox.classList.add('visible');
+            if (container) container.classList.add('has-hover');
+
+            if (linkData && card) {
+                sysIdEl.innerText = `SYS // ${linkData.id}`;
+                nameEl.innerText = linkData.name.toUpperCase();
+                handleEl.innerText = linkData.handle;
+                statEl.innerText = linkData.stats;
+                avatarEl.src = linkData.avatar;
+
+                const rect = node.getBoundingClientRect();
+                card.style.left = `${rect.left - 300}px`;
+                card.style.top = `${rect.top - 15}px`;
+                card.classList.add('visible');
             }
-            state.preview.active = true;
-            state.preview.name = name;
         });
 
         node.addEventListener('mouseleave', () => {
-            if (previewBox) {
-                previewBox.classList.remove('visible');
-                previewBox.removeAttribute('data-active-brand');
-            }
-            state.preview.active = false;
-        });
-    });
-
-    window.addEventListener('mousemove', (e) => {
-        if (state.preview.active && previewBox) {
-            state.preview.x += (e.clientX - state.preview.x) * 0.15;
-            state.preview.y += (e.clientY - state.preview.y) * 0.15;
-            previewBox.style.left = `${state.preview.x}px`;
-            previewBox.style.top = `${state.preview.y}px`;
-        }
-    });
-}
-
-/* 11. COMMAND SYSTEM (CTRL + K) */
-function setupCommandPalette() {
-    const backdrop = document.getElementById('command-palette-backdrop');
-    const input = document.getElementById('command-input');
-    const items = document.querySelectorAll('.command-item');
-
-    function togglePalette(open) {
-        if (!backdrop) return;
-        if (open) {
-            backdrop.classList.add('active');
-            if (input) { input.value = ''; input.focus(); }
-        } else {
-            backdrop.classList.remove('active');
-        }
-    }
-
-    window.addEventListener('keydown', (e) => {
-        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-            e.preventDefault();
-            togglePalette(!backdrop.classList.contains('active'));
-        } else if (e.key === 'Escape') {
-            togglePalette(false);
-            if (state.focusMode) toggleFocusMode(false);
-        } else if (e.key.toLowerCase() === 'f' && document.activeElement !== input) {
-            toggleFocusMode(!state.focusMode);
-        }
-    });
-
-    if (backdrop) {
-        backdrop.addEventListener('click', (e) => {
-            if (e.target === backdrop) togglePalette(false);
-        });
-    }
-
-    if (input) {
-        input.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            items.forEach(item => {
-                const label = item.querySelector('.cmd-label').innerText.toLowerCase();
-                const desc = item.querySelector('.cmd-desc').innerText.toLowerCase();
-                item.style.display = (label.includes(query) || desc.includes(query)) ? 'flex' : 'none';
-            });
-        });
-    }
-
-    items.forEach(item => {
-        item.addEventListener('click', () => {
-            executeCommand(item.getAttribute('data-action'));
-            togglePalette(false);
+            if (container) container.classList.remove('has-hover');
+            if (card) card.classList.remove('visible');
         });
     });
 }
 
-function executeCommand(action) {
-    if (action === 'focus') {
-        toggleFocusMode(!state.focusMode);
-    } else if (action === 'reduce-fx') {
-        state.reducedMotion = !state.reducedMotion;
-    } else {
-        triggerNodeAction(action);
-    }
-}
-
-/* 12. FOCUS MODE */
-function toggleFocusMode(enable) {
-    state.focusMode = enable;
-    document.body.classList.toggle('focus-mode', enable);
-}
-
-/* 13. SECRET INTERACTION (EASTER EGG) */
-function setupEasterEggs() {
-    const avatar = document.getElementById('avatar-container');
-    if (!avatar) return;
-
-    avatar.addEventListener('click', () => {
-        state.avatarClicks++;
-        clearTimeout(state.avatarClickTimer);
-
-        if (state.avatarClicks >= 5) {
-            triggerOverdrive();
-            state.avatarClicks = 0;
-        } else {
-            state.avatarClickTimer = setTimeout(() => { state.avatarClicks = 0; }, 1000);
-        }
-    });
-}
-
-function triggerOverdrive() {
-    if (state.overdrive) return;
-    state.overdrive = true;
-    const root = document.documentElement;
-    root.style.setProperty('--accent', '#FFFFFF');
-    root.style.setProperty('--accent-glow', 'rgba(255, 255, 255, 0.3)');
-
-    setTimeout(() => {
-        root.style.setProperty('--accent', '#B6FF00');
-        root.style.setProperty('--accent-glow', 'rgba(182, 255, 0, 0.15)');
-        state.overdrive = false;
-    }, 3000);
-}
-
-/* 14. REDUCED MOTION */
-function setupReducedMotion() {
-    state.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-/* 15. VISIBILITY OPTIMIZATION */
-function setupVisibilityOptimization() {}
-
-/* 16. KICK LIVE CHECKER, TOP HUD UPDATER & LARGE 3D WIDGET */
+/* KICK LIVE CHECKER & VIEWERS COUNTER */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
@@ -448,17 +318,18 @@ async function checkKickStatus() {
     const holoStatusTag = document.getElementById('holo-status-tag');
     const holoScreenFrame = document.getElementById('holo-screen-frame');
     const holoFooterText = document.getElementById('holo-footer-text');
+    const viewersBadge = document.getElementById('holo-viewers-badge');
+    const viewerCountEl = document.getElementById('viewer-count');
     
-    // Top Right HUD Elements
     const topStatusDot = document.getElementById('top-status-dot');
     const topStatusText = document.getElementById('top-status-text');
     
     if (!kickNode) return;
-
     const subtitleEl = kickNode.querySelector('.node-subtitle');
     
     if (holoWidget) {
         holoWidget.onclick = () => {
+            playUiSound();
             window.open('https://kick.com/imohab', '_blank');
         };
     }
@@ -469,7 +340,6 @@ async function checkKickStatus() {
             const data = await response.json();
             
             if (data.isLive === true) {
-                // وضع البث المباشر (LIVE)
                 if (subtitleEl) subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold;">● LIVE NOW</span>';
                 kickNode.style.borderLeft = '2px solid #53FC18';
                 kickNode.style.paddingLeft = '10px';
@@ -482,7 +352,11 @@ async function checkKickStatus() {
                 if (holoStatusTag) holoStatusTag.innerText = 'LIVE // 1080P';
                 if (holoFooterText) holoFooterText.innerText = 'CLICK TO JOIN STREAM';
 
-                // تحديث الـ HUD اللي فوق على اليمين لـ LIVE
+                if (viewersBadge && viewerCountEl) {
+                    viewerCountEl.innerText = data.viewers || '120';
+                    viewersBadge.style.display = 'flex';
+                }
+
                 if (topStatusDot) topStatusDot.classList.add('is-live');
                 if (topStatusText) {
                     topStatusText.innerText = 'LIVE NOW';
@@ -493,7 +367,6 @@ async function checkKickStatus() {
                     holoScreenFrame.innerHTML = '<iframe src="https://player.kick.com/imohab?muted=true" frameborder="0" scrolling="no" allowfullscreen></iframe>';
                 }
             } else {
-                // وضع الأوفلاين (OFFLINE / STANDBY)
                 if (subtitleEl) subtitleEl.innerText = 'LIVE STREAMING';
                 kickNode.style.borderLeft = 'none';
                 kickNode.style.paddingLeft = '0px';
@@ -506,7 +379,8 @@ async function checkKickStatus() {
                 if (holoStatusTag) holoStatusTag.innerText = 'KICK // OFF';
                 if (holoFooterText) holoFooterText.innerText = 'STANDBY MODE';
 
-                // تحديث الـ HUD اللي فوق على اليمين لـ OFFLINE
+                if (viewersBadge) viewersBadge.style.display = 'none';
+
                 if (topStatusDot) topStatusDot.classList.remove('is-live');
                 if (topStatusText) {
                     topStatusText.innerText = 'OFFLINE';

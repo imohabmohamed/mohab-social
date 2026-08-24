@@ -38,7 +38,7 @@
         <section class="identity-section" aria-label="Player Identity">
             <div class="identity-object" id="identity-object">
                 <!-- Avatar System -->
-                <div class="avatar-container" id="avatar-container" role="button" aria-label="Player Avatar (Interactive Easter Egg)">
+                <div class="avatar-container" id="avatar-container" role="button" aria-label="Player Avatar">
                     <div class="avatar-shadow"></div>
                     <div class="avatar-ambient-glow"></div>
                     <div class="avatar-outer-ring"></div>
@@ -60,11 +60,12 @@
                 </div>
             </div>
 
-            <!-- Hologram Stream Deck Under Identity -->
+            <!-- Larger Hologram Stream Deck with Live Viewer Counter -->
             <div class="hologram-live-widget" id="hologram-live-widget">
                 <div class="holo-header">
                     <span class="holo-live-dot" id="holo-dot"></span>
                     <span class="holo-title-text" id="holo-stream-title">OFFLINE</span>
+                    <span class="holo-viewers-badge" id="holo-viewers-badge" style="display: none;">👁 <span id="viewer-count">0</span></span>
                     <span class="holo-tag" id="holo-status-tag">KICK // OFF</span>
                 </div>
                 <div class="holo-screen-frame" id="holo-screen-frame">
@@ -152,6 +153,30 @@
 
     </main>
 
+    <!-- Holographic Platform Info Card (Popup on Hover) -->
+    <div class="holo-preview-card" id="holo-preview-card" aria-hidden="true">
+        <div class="card-glow-bg"></div>
+        <div class="card-header-bar">
+            <span class="card-sys-id" id="card-sys-id">SYS // 01</span>
+            <span class="card-live-status">ACTIVE</span>
+        </div>
+        <div class="card-content-body">
+            <div class="card-avatar-wrap">
+                <img id="card-platform-avatar" src="assets/avatar.jpg" alt="Avatar">
+            </div>
+            <div class="card-info-wrap">
+                <h3 id="card-platform-name">PLATFORM</h3>
+                <p id="card-platform-handle">@imohab</p>
+                <div class="card-stats-row">
+                    <span id="card-platform-stat">14.2K FOLLOWERS</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer-bar">
+            <span>CLICK TO LAUNCH NODE ↗</span>
+        </div>
+    </div>
+
     <!-- Footer Copyright & Creator Signature -->
     <footer class="nexus-footer">
         <div class="footer-line"><span class="copy-symbol">©</span> 2026 <span class="footer-brand">MOHAB</span>. All rights reserved.</div>
@@ -161,65 +186,6 @@
     <!-- Interactive Cursor System (Desktop) -->
     <div class="cursor-core" id="cursor-core"></div>
     <div class="cursor-halo" id="cursor-halo"></div>
-    <div class="cursor-interaction-ring" id="cursor-interaction-ring"></div>
-
-    <!-- Link Preview Float (Desktop) -->
-    <div class="link-preview-box" id="link-preview-box" aria-hidden="true">
-        <span class="preview-action">OPEN</span>
-        <span class="preview-target" id="preview-target-name">DISCORD</span>
-        <span class="preview-arrow">↗</span>
-    </div>
-
-    <!-- Command Palette Overlay -->
-    <div class="command-palette-backdrop" id="command-palette-backdrop" aria-hidden="true">
-        <div class="command-palette-container" role="dialog" aria-modal="true" aria-label="Command System">
-            <div class="command-palette-header">
-                <span class="cmd-prompt-symbol">></span>
-                <input type="text" id="command-input" placeholder="Type a command or search node..." autocomplete="off" spellcheck="false">
-                <span class="cmd-shortcut-hint">ESC to close</span>
-            </div>
-            <div class="command-list" id="command-list">
-                <div class="command-item active" data-action="discord">
-                    <span class="cmd-key">01</span>
-                    <span class="cmd-label">OPEN DISCORD</span>
-                    <span class="cmd-desc">Community Network</span>
-                </div>
-                <div class="command-item" data-action="youtube">
-                    <span class="cmd-key">02</span>
-                    <span class="cmd-label">OPEN YOUTUBE</span>
-                    <span class="cmd-desc">Gaming Content Vault</span>
-                </div>
-                <div class="command-item" data-action="tiktok">
-                    <span class="cmd-key">03</span>
-                    <span class="cmd-label">OPEN TIKTOK</span>
-                    <span class="cmd-desc">Short Form Streams</span>
-                </div>
-                <div class="command-item" data-action="instagram">
-                    <span class="cmd-key">04</span>
-                    <span class="cmd-label">OPEN INSTAGRAM</span>
-                    <span class="cmd-desc">Visual Feed</span>
-                </div>
-                <div class="command-item" data-action="kick">
-                    <span class="cmd-key">05</span>
-                    <span class="cmd-label">OPEN KICK</span>
-                    <span class="cmd-desc">Live Streaming</span>
-                </div>
-                <div class="command-item" data-action="focus">
-                    <span class="cmd-key">F</span>
-                    <span class="cmd-label">TOGGLE FOCUS MODE</span>
-                    <span class="cmd-desc">Deep immersion state</span>
-                </div>
-                <div class="command-item" data-action="reduce-fx">
-                    <span class="cmd-key">R</span>
-                    <span class="cmd-label">REDUCE EFFECTS</span>
-                    <span class="cmd-desc">Streamline performance</span>
-                </div>
-            </div>
-            <div class="command-palette-footer">
-                <span>NEXUS OS // COMMAND K &nbsp;|&nbsp; USE ARROWS OR TYPE TO FILTER</span>
-            </div>
-        </div>
-    </div>
 
     <!-- Opening Intro Sequence Layer -->
     <div class="intro-curtain" id="intro-curtain">
