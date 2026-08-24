@@ -12,17 +12,16 @@ const state = {
     cursor: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     halo: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     links: [
-        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", stats: "LOADING...", avatar: "assets/discord.jpg" },
-        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", stats: "LOADING...", avatar: "assets/youtube.jpg" },
-        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", stats: "LOADING...", avatar: "assets/tiktok.jpg" },
-        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", stats: "LOADING...", avatar: "assets/instagram.jpg" },
-        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", stats: "LOADING...", avatar: "assets/kick.jpg" }
+        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", stats: "1,250 MEMBERS", avatar: "assets/discord.jpg" },
+        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", stats: "14.2K SUBSCRIBERS", avatar: "assets/youtube.jpg" },
+        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", stats: "45.8K FOLLOWERS", avatar: "assets/tiktok.jpg" },
+        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", stats: "8.9K FOLLOWERS", avatar: "assets/instagram.jpg" },
+        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", stats: "LIVE STREAMING", avatar: "assets/kick.jpg" }
     ]
 };
 
-async function init() {
+function init() {
     setupOpeningSequence();
-    await fetchRealStats(); // جلب البيانات الحقيقية فور فتح الموقع
     renderLinks();
     setupClock();
     setupParticles();
@@ -44,28 +43,6 @@ function setupOpeningSequence() {
         const app = document.getElementById('nexus-app');
         if (app) app.classList.add('revealed');
     }, 400);
-}
-
-/* FETCH REAL STATS FROM BACKEND API */
-async function fetchRealStats() {
-    try {
-        const response = await fetch('/api/stats');
-        if (response.ok) {
-            const data = await response.json();
-            if (data.discord) state.links[0].stats = data.discord;
-            if (data.youtube) state.links[1].stats = data.youtube;
-            if (data.tiktok) state.links[2].stats = data.tiktok;
-            if (data.instagram) state.links[3].stats = data.instagram;
-            if (data.kick) state.links[4].stats = data.kick;
-        }
-    } catch (e) {
-        // Fallback في حال عدم الاتصال بالسيرفر مؤقتاً
-        state.links[0].stats = "1,250 MEMBERS";
-        state.links[1].stats = "14.2K SUBSCRIBERS";
-        state.links[2].stats = "45.8K FOLLOWERS";
-        state.links[3].stats = "8.9K FOLLOWERS";
-        state.links[4].stats = "2.1K FOLLOWERS";
-    }
 }
 
 function renderLinks() {
@@ -305,7 +282,7 @@ function setupPlatformCardPreview() {
     });
 }
 
-/* KICK LIVE CHECKER & VIEWERS COUNTER */
+/* KICK REAL-TIME LIVE CHECKER & EXACT VIEWER COUNT */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
@@ -352,8 +329,9 @@ async function checkKickStatus() {
                 if (holoStatusTag) holoStatusTag.innerText = 'LIVE // 1080P';
                 if (holoFooterText) holoFooterText.innerText = 'CLICK TO JOIN STREAM';
 
+                // عرض عدد المشاهدين الحقيقي الدقيق من كيك
                 if (viewersBadge && viewerCountEl) {
-                    viewerCountEl.innerText = data.viewers || '120';
+                    viewerCountEl.innerText = data.viewers;
                     viewersBadge.style.display = 'flex';
                 }
 
