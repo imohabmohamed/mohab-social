@@ -12,17 +12,16 @@ const state = {
     cursor: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     halo: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     links: [
-        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", stats: "1,450 MEMBERS", avatar: "assets/avatar.jpg" },
-        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", stats: "14.2K SUBSCRIBERS", avatar: "assets/avatar.jpg" },
-        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", stats: "45.8K FOLLOWERS", avatar: "assets/avatar.jpg" },
-        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", stats: "8.9K FOLLOWERS", avatar: "assets/avatar.jpg" },
-        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", stats: "2.1K FOLLOWERS", avatar: "assets/avatar.jpg" }
+        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", avatar: "assets/avatar.jpg" },
+        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", avatar: "assets/avatar.jpg" },
+        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", avatar: "assets/avatar.jpg" },
+        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", avatar: "assets/avatar.jpg" },
+        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", avatar: "assets/avatar.jpg" }
     ]
 };
 
 async function init() {
     setupOpeningSequence();
-    await fetchLiveStats(); // جلب الأرقام المحدثة فوراً
     renderLinks();
     setupClock();
     setupParticles();
@@ -44,23 +43,6 @@ function setupOpeningSequence() {
         const app = document.getElementById('nexus-app');
         if (app) app.classList.add('revealed');
     }, 400);
-}
-
-/* جلب أعداد المتابعين الحقيقية من السيرفر الخلفي */
-async function fetchLiveStats() {
-    try {
-        const response = await fetch('/api/stats');
-        if (response.ok) {
-            const data = await response.json();
-            if (data.discord) state.links[0].stats = data.discord;
-            if (data.youtube) state.links[1].stats = data.youtube;
-            if (data.tiktok) state.links[2].stats = data.tiktok;
-            if (data.instagram) state.links[3].stats = data.instagram;
-            if (data.kick) state.links[4].stats = data.kick;
-        }
-    } catch (e) {
-        console.log("Using static profile stats.");
-    }
 }
 
 function renderLinks() {
@@ -260,7 +242,7 @@ function setupMagneticLinks() {
     });
 }
 
-/* INTERACTIVE PLATFORM CARD PREVIEW & BLUR EFFECT */
+/* INTERACTIVE PLATFORM CARD PREVIEW & DYNAMIC BRAND COLORS */
 function setupPlatformCardPreview() {
     if (window.innerWidth <= 1024) return;
 
@@ -269,7 +251,6 @@ function setupPlatformCardPreview() {
     const sysIdEl = document.getElementById('card-sys-id');
     const nameEl = document.getElementById('card-platform-name');
     const handleEl = document.getElementById('card-platform-handle');
-    const statEl = document.getElementById('card-platform-stat');
     const avatarEl = document.getElementById('card-platform-avatar');
     const nodes = document.querySelectorAll('.nav-node');
 
@@ -282,9 +263,11 @@ function setupPlatformCardPreview() {
             if (linkData && card) {
                 sysIdEl.innerText = `SYS // ${linkData.id}`;
                 nameEl.innerText = linkData.name.toUpperCase();
-                handleEl.innerText = linkData.handle;
-                statEl.innerText = linkData.stats;
+                handleEl.innerText = linkData.subtitle; // عرض الوصف التفصيلي جوه الكارت
                 avatarEl.src = linkData.avatar;
+
+                // تعيين لون الكارت ليطابق لون المنصة
+                card.setAttribute('data-active-brand', linkData.brand);
 
                 const rect = node.getBoundingClientRect();
                 card.style.left = `${rect.left - 300}px`;
@@ -295,12 +278,15 @@ function setupPlatformCardPreview() {
 
         node.addEventListener('mouseleave', () => {
             if (container) container.classList.remove('has-hover');
-            if (card) card.classList.remove('visible');
+            if (card) {
+                card.classList.remove('visible');
+                card.removeAttribute('data-active-brand');
+            }
         });
     });
 }
 
-/* KICK LIVE CHECKER & EXACT VIEWER COUNT */
+/* KICK LIVE CHECKER */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
@@ -319,15 +305,12 @@ async function checkKickStatus() {
     const topStatusDot = document.getElementById('top-status-dot');
     const topStatusText = document.getElementById('top-status-text');
     
-    if (!kickNode) return;
-    const subtitleEl = kickNode.querySelector('.node-subtitle');
+    if (!holoWidget) return;
     
-    if (holoWidget) {
-        holoWidget.onclick = () => {
-            playUiSound();
-            window.open('https://kick.com/imohab', '_blank');
-        };
-    }
+    holoWidget.onclick = () => {
+        playUiSound();
+        window.open('https://kick.com/imohab', '_blank');
+    };
 
     try {
         const response = await fetch('/api/check-live');
@@ -335,10 +318,6 @@ async function checkKickStatus() {
             const data = await response.json();
             
             if (data.isLive === true) {
-                if (subtitleEl) subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold;">● LIVE NOW</span>';
-                kickNode.style.borderLeft = '2px solid #53FC18';
-                kickNode.style.paddingLeft = '10px';
-
                 if (holoDot) holoDot.classList.add('is-live');
                 if (holoTitle) {
                     holoTitle.classList.add('is-live');
@@ -364,10 +343,6 @@ async function checkKickStatus() {
                     holoScreenFrame.innerHTML = '<iframe src="https://player.kick.com/imohab?muted=true" frameborder="0" scrolling="no" allowfullscreen></iframe>';
                 }
             } else {
-                if (subtitleEl) subtitleEl.innerText = 'LIVE STREAMING';
-                kickNode.style.borderLeft = 'none';
-                kickNode.style.paddingLeft = '0px';
-
                 if (holoDot) holoDot.classList.remove('is-live');
                 if (holoTitle) {
                     holoTitle.classList.remove('is-live');
