@@ -11,12 +11,13 @@ const state = {
     mouse: { x: window.innerWidth / 2, y: window.innerHeight / 2, tx: window.innerWidth / 2, ty: window.innerHeight / 2, active: false },
     cursor: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     halo: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
+    // 👇 حط هنا أرقام الفولورز وصورة البروفايل الحقيقية لكل أكونت عندك بالظبط 👇
     links: [
-        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", stats: "1,250 MEMBERS", avatar: "assets/discord.jpg" },
-        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", stats: "14.2K SUBSCRIBERS", avatar: "assets/youtube.jpg" },
-        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", stats: "45.8K FOLLOWERS", avatar: "assets/tiktok.jpg" },
-        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", stats: "8.9K FOLLOWERS", avatar: "assets/instagram.jpg" },
-        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", stats: "LIVE STREAMING", avatar: "assets/kick.jpg" }
+        { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", stats: "1,450 MEMBERS", avatar: "assets/avatar.jpg" },
+        { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", stats: "14.2K SUBSCRIBERS", avatar: "assets/avatar.jpg" },
+        { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", stats: "45.8K FOLLOWERS", avatar: "assets/avatar.jpg" },
+        { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", stats: "8.9K FOLLOWERS", avatar: "assets/avatar.jpg" },
+        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", stats: "LIVE STREAMING", avatar: "assets/avatar.jpg" }
     ]
 };
 
@@ -282,7 +283,7 @@ function setupPlatformCardPreview() {
     });
 }
 
-/* KICK REAL-TIME LIVE CHECKER & EXACT VIEWER COUNT */
+/* KICK LIVE CHECKER & EXACT VIEWER COUNT */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
@@ -329,10 +330,12 @@ async function checkKickStatus() {
                 if (holoStatusTag) holoStatusTag.innerText = 'LIVE // 1080P';
                 if (holoFooterText) holoFooterText.innerText = 'CLICK TO JOIN STREAM';
 
-                // عرض عدد المشاهدين الحقيقي الدقيق من كيك
-                if (viewersBadge && viewerCountEl) {
+                // إظهار المشاهدين فقط لو البث شغال فعلاً ومرتبط برقم صحيح
+                if (viewersBadge && viewerCountEl && data.viewers > 0) {
                     viewerCountEl.innerText = data.viewers;
                     viewersBadge.style.display = 'flex';
+                } else if (viewersBadge) {
+                    viewersBadge.style.display = 'none';
                 }
 
                 if (topStatusDot) topStatusDot.classList.add('is-live');
@@ -377,7 +380,7 @@ async function checkKickStatus() {
             }
         }
     } catch (error) {
-        console.log("Live check error:", error);
+        if (viewersBadge) viewersBadge.style.display = 'none';
     }
 }
 
