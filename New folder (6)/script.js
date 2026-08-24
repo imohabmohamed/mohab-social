@@ -435,7 +435,7 @@ function setupReducedMotion() {
 /* 15. VISIBILITY OPTIMIZATION */
 function setupVisibilityOptimization() {}
 
-/* 16. KICK LIVE CHECKER & PERMANENT HOLOGRAPHIC WIDGET */
+/* 16. KICK LIVE CHECKER, TOP HUD UPDATER & LARGE 3D WIDGET */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
@@ -449,11 +449,14 @@ async function checkKickStatus() {
     const holoScreenFrame = document.getElementById('holo-screen-frame');
     const holoFooterText = document.getElementById('holo-footer-text');
     
+    // Top Right HUD Elements
+    const topStatusDot = document.getElementById('top-status-dot');
+    const topStatusText = document.getElementById('top-status-text');
+    
     if (!kickNode) return;
 
     const subtitleEl = kickNode.querySelector('.node-subtitle');
     
-    // ربط الضغط على الهولوجرام لفتح القناة في كل الأوقات
     if (holoWidget) {
         holoWidget.onclick = () => {
             window.open('https://kick.com/imohab', '_blank');
@@ -466,7 +469,7 @@ async function checkKickStatus() {
             const data = await response.json();
             
             if (data.isLive === true) {
-                // وضع اللايف
+                // وضع البث المباشر (LIVE)
                 if (subtitleEl) subtitleEl.innerHTML = '<span style="color: #53FC18; font-weight: bold;">● LIVE NOW</span>';
                 kickNode.style.borderLeft = '2px solid #53FC18';
                 kickNode.style.paddingLeft = '10px';
@@ -479,12 +482,18 @@ async function checkKickStatus() {
                 if (holoStatusTag) holoStatusTag.innerText = 'LIVE // 1080P';
                 if (holoFooterText) holoFooterText.innerText = 'CLICK TO JOIN STREAM';
 
-                // عرض إمبد البث الحي لو مش متواجد حالياً
+                // تحديث الـ HUD اللي فوق على اليمين لـ LIVE
+                if (topStatusDot) topStatusDot.classList.add('is-live');
+                if (topStatusText) {
+                    topStatusText.innerText = 'LIVE NOW';
+                    topStatusText.style.color = '#53FC18';
+                }
+
                 if (holoScreenFrame && !holoScreenFrame.querySelector('iframe')) {
                     holoScreenFrame.innerHTML = '<iframe src="https://player.kick.com/imohab?muted=true" frameborder="0" scrolling="no" allowfullscreen></iframe>';
                 }
             } else {
-                // وضع الأوفلاين (الشاشة موجودة لكن تعرض وضع الاستعداد)
+                // وضع الأوفلاين (OFFLINE / STANDBY)
                 if (subtitleEl) subtitleEl.innerText = 'LIVE STREAMING';
                 kickNode.style.borderLeft = 'none';
                 kickNode.style.paddingLeft = '0px';
@@ -497,7 +506,13 @@ async function checkKickStatus() {
                 if (holoStatusTag) holoStatusTag.innerText = 'KICK // OFF';
                 if (holoFooterText) holoFooterText.innerText = 'STANDBY MODE';
 
-                // إرجاع واجهة الأوفلاين لو الـ iframe موجود
+                // تحديث الـ HUD اللي فوق على اليمين لـ OFFLINE
+                if (topStatusDot) topStatusDot.classList.remove('is-live');
+                if (topStatusText) {
+                    topStatusText.innerText = 'OFFLINE';
+                    topStatusText.style.color = 'var(--muted)';
+                }
+
                 const iframe = holoScreenFrame?.querySelector('iframe');
                 if (iframe) {
                     holoScreenFrame.innerHTML = `

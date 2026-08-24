@@ -26,24 +26,15 @@
     <!-- Generative Canvas Background -->
     <canvas id="nexus-canvas"></canvas>
 
-    <!-- Edge HUD -->
-    <header class="hud hud-top-left" aria-hidden="true">
-        <span class="hud-glitch">MOHAB // NEXUS</span>
-    </header>
-    <div class="hud hud-top-right" aria-hidden="true">
-        <span class="status-dot"></span> ONLINE
-    </div>
-    <div class="hud hud-bottom-left" aria-hidden="true">
-        SESSION // ACTIVE <span id="live-clock">00:00:00</span>
-    </div>
-    <div class="hud hud-bottom-right" aria-hidden="true">
-        2026 // v4.1.0
+    <!-- Edge HUD (Online Status Top Right) -->
+    <div class="hud hud-top-right" aria-hidden="true" id="top-status-hud">
+        <span class="status-dot" id="top-status-dot"></span> <span id="top-status-text">OFFLINE</span>
     </div>
 
     <!-- Main Spatial App Environment -->
     <main class="nexus-app" id="nexus-app">
         
-        <!-- Left Side: Identity Object & Permanent Hologram Screen -->
+        <!-- Left Side: Identity Object (Vertical Stack: Avatar -> Name -> Stream Screen) -->
         <section class="identity-section" aria-label="Player Identity">
             <div class="identity-object" id="identity-object">
                 <!-- Avatar System -->
@@ -64,23 +55,19 @@
                     <h1 class="logo-text" id="logo-text">MOHAB</h1>
                     <div class="identity-metadata">
                         <div class="role-primary">DIGITAL PLAYER</div>
-                        <div class="role-secondary">GAMER / CREATOR / PC ENTHUSIAST</div>
-                        <div class="identity-status-badge">
-                            <span class="breathing-dot"></span> ONLINE &nbsp;//&nbsp; IDENTITY // VERIFIED
-                        </div>
+                        <div class="role-secondary">GAMER / CREATOR</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Permanent Hologram Stream Deck (Always Visible) -->
+            <!-- Hologram Stream Deck Under Identity -->
             <div class="hologram-live-widget" id="hologram-live-widget">
                 <div class="holo-header">
                     <span class="holo-live-dot" id="holo-dot"></span>
-                    <span class="holo-title-text" id="holo-stream-title">OFFLINE / STANDBY</span>
+                    <span class="holo-title-text" id="holo-stream-title">OFFLINE</span>
                     <span class="holo-tag" id="holo-status-tag">KICK // OFF</span>
                 </div>
                 <div class="holo-screen-frame" id="holo-screen-frame">
-                    <!-- تتغير بناءً على حالة اللايف -->
                     <div class="offline-placeholder" id="offline-placeholder">
                         <span>STREAM OFFLINE</span>
                         <p>CLICK TO VISIT CHANNEL</p>
@@ -164,6 +151,12 @@
         </nav>
 
     </main>
+
+    <!-- Footer Copyright & Creator Signature -->
+    <footer class="nexus-footer">
+        <div class="footer-line"><span class="copy-symbol">©</span> 2026 <span class="footer-brand">MOHAB</span>. All rights reserved.</div>
+        <div class="footer-subline">Developed By <span class="footer-author">MOHAB</span></div>
+    </footer>
 
     <!-- Interactive Cursor System (Desktop) -->
     <div class="cursor-core" id="cursor-core"></div>
