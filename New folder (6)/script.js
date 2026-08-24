@@ -11,18 +11,18 @@ const state = {
     mouse: { x: window.innerWidth / 2, y: window.innerHeight / 2, tx: window.innerWidth / 2, ty: window.innerHeight / 2, active: false },
     cursor: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
     halo: { x: window.innerWidth / 2, y: window.innerHeight / 2, currentX: window.innerWidth / 2, currentY: window.innerHeight / 2 },
-    // 👇 حط هنا أرقام الفولورز وصورة البروفايل الحقيقية لكل أكونت عندك بالظبط 👇
     links: [
         { id: "01", name: "Discord", subtitle: "Community", url: "https://discord.gg/mnqhgHgUmB", brand: "discord", handle: "MOHAB // COMMUNITY", stats: "1,450 MEMBERS", avatar: "assets/avatar.jpg" },
         { id: "02", name: "YouTube", subtitle: "Gaming Content", url: "https://www.youtube.com/@imuhab", brand: "youtube", handle: "@imuhab", stats: "14.2K SUBSCRIBERS", avatar: "assets/avatar.jpg" },
         { id: "03", name: "TikTok", subtitle: "Short Form", url: "https://www.tiktok.com/@imuhab", brand: "tiktok", handle: "@imuhab", stats: "45.8K FOLLOWERS", avatar: "assets/avatar.jpg" },
         { id: "04", name: "Instagram", subtitle: "Social", url: "https://www.instagram.com/imuhab.mohamed", brand: "instagram", handle: "@imuhab.mohamed", stats: "8.9K FOLLOWERS", avatar: "assets/avatar.jpg" },
-        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", stats: "LIVE STREAMING", avatar: "assets/avatar.jpg" }
+        { id: "05", name: "Kick", subtitle: "Live Streaming", url: "https://kick.com/imohab", brand: "kick", handle: "@imohab", stats: "2.1K FOLLOWERS", avatar: "assets/avatar.jpg" }
     ]
 };
 
-function init() {
+async function init() {
     setupOpeningSequence();
+    await fetchLiveStats(); // جلب الأرقام المحدثة فوراً
     renderLinks();
     setupClock();
     setupParticles();
@@ -44,6 +44,23 @@ function setupOpeningSequence() {
         const app = document.getElementById('nexus-app');
         if (app) app.classList.add('revealed');
     }, 400);
+}
+
+/* جلب أعداد المتابعين الحقيقية من السيرفر الخلفي */
+async function fetchLiveStats() {
+    try {
+        const response = await fetch('/api/stats');
+        if (response.ok) {
+            const data = await response.json();
+            if (data.discord) state.links[0].stats = data.discord;
+            if (data.youtube) state.links[1].stats = data.youtube;
+            if (data.tiktok) state.links[2].stats = data.tiktok;
+            if (data.instagram) state.links[3].stats = data.instagram;
+            if (data.kick) state.links[4].stats = data.kick;
+        }
+    } catch (e) {
+        console.log("Using static profile stats.");
+    }
 }
 
 function renderLinks() {
@@ -330,7 +347,6 @@ async function checkKickStatus() {
                 if (holoStatusTag) holoStatusTag.innerText = 'LIVE // 1080P';
                 if (holoFooterText) holoFooterText.innerText = 'CLICK TO JOIN STREAM';
 
-                // إظهار المشاهدين فقط لو البث شغال فعلاً ومرتبط برقم صحيح
                 if (viewersBadge && viewerCountEl && data.viewers > 0) {
                     viewerCountEl.innerText = data.viewers;
                     viewersBadge.style.display = 'flex';
