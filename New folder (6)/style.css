@@ -119,6 +119,19 @@ body {
     50% { opacity: 1; transform: scale(1.2); }
 }
 
+/* تأثير التوهج والنور لكلمة لايف */
+.live-glow-text {
+    color: #53FC18 !important;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(83, 252, 24, 0.8), 0 0 20px rgba(83, 252, 24, 0.5);
+    animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; text-shadow: 0 0 5px rgba(83, 252, 24, 0.4); }
+    50% { opacity: 1; text-shadow: 0 0 15px rgba(83, 252, 24, 1); }
+}
+
 .nexus-app {
     position: relative;
     width: 100%;
@@ -265,9 +278,10 @@ body {
     font-family: monospace;
 }
 
+/* تكبير شاشة البث لتصبح واضحة وبارزة */
 .hologram-live-widget {
     width: 100%;
-    max-width: 380px;
+    max-width: 440px;
     background: rgba(5, 5, 5, 0.92);
     border: 1px solid rgba(83, 252, 24, 0.35);
     border-radius: var(--radius-md);
@@ -339,7 +353,7 @@ body {
 
 .holo-screen-frame {
     width: 100%;
-    height: 160px;
+    height: 210px;
     border-radius: 4px;
     overflow: hidden;
     background: #000;

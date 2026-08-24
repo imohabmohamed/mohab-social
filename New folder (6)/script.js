@@ -263,7 +263,8 @@ function setupPlatformCardPreview() {
             if (linkData && card) {
                 sysIdEl.innerText = `SYS // ${linkData.id}`;
                 nameEl.innerText = linkData.name.toUpperCase();
-                handleEl.innerText = linkData.subtitle;
+                // دعم إدراج HTML لتظهر الأكواد والتوهج بداخل الكارت بشكل صحيح
+                handleEl.innerHTML = linkData.subtitle;
                 avatarEl.src = linkData.avatar;
 
                 card.setAttribute('data-active-brand', linkData.brand);
@@ -285,7 +286,7 @@ function setupPlatformCardPreview() {
     });
 }
 
-/* KICK LIVE CHECKER & CARD LIVE STATUS UPDATE */
+/* KICK LIVE CHECKER & DIRECT NOTIFICATION */
 window.addEventListener('load', () => {
     setTimeout(checkKickStatus, 300);
 });
@@ -302,6 +303,8 @@ async function checkKickStatus() {
     
     const topStatusDot = document.getElementById('top-status-dot');
     const topStatusText = document.getElementById('top-status-text');
+    const kickNode = document.querySelector('.nav-node[data-brand="kick"]');
+    const kickTitle = kickNode ? kickNode.querySelector('.node-title') : null;
     
     if (!holoWidget) return;
     
@@ -316,8 +319,13 @@ async function checkKickStatus() {
             const data = await response.json();
             
             if (data.isLive === true) {
-                // تحديث نص الكارت الخاص بكيك ليظهر بوضوح أن اللايف شغال
-                state.links[4].subtitle = "● LIVE NOW - JOIN STREAM";
+                // تنبيه مباشر عند زرار كيك في القائمة بدون كارت
+                if (kickTitle) {
+                    kickTitle.innerHTML = 'KICK <span class="live-glow-text" style="font-size: 0.6rem; background: rgba(83,252,24,0.15); padding: 2px 6px; border-radius: 4px; vertical-align: middle; margin-left: 8px;">● LIVE NOW</span>';
+                }
+
+                // تفعيل التوهج والنص المتحرك داخل الكارت
+                state.links[4].subtitle = '<span class="live-glow-text">● LIVE NOW - JOIN STREAM</span>';
 
                 if (holoDot) holoDot.classList.add('is-live');
                 if (holoTitle) {
@@ -344,6 +352,9 @@ async function checkKickStatus() {
                     holoScreenFrame.innerHTML = '<iframe src="https://player.kick.com/imohab?muted=true" frameborder="0" scrolling="no" allowfullscreen></iframe>';
                 }
             } else {
+                if (kickTitle) {
+                    kickTitle.innerText = 'KICK';
+                }
                 state.links[4].subtitle = "LIVE STREAMING";
 
                 if (holoDot) holoDot.classList.remove('is-live');
